@@ -1,0 +1,87 @@
+set -g default-shell /usr/local/bin/zsh
+set -g default-command "/usr/local/bin/zsh -c '. ~/.zshrc && lsr && /usr/local/bin/zsh'"
+set -g prefix C-q
+
+setw -g xterm-keys on
+set -s escape-time 10                     # faster command sequences
+set -sg repeat-time 600                   # increase repeat timeout
+set -s focus-events on
+
+#
+# Display
+#
+
+set -g display-panes-time 800 # slightly longer pane indicators display time
+set -g display-time 1000 # slightly longer status messages display time
+
+set -g status-interval 1
+set -g status-justify left
+set -g status-left-length 150
+set -g status-left ' #[fg=green]#S '
+set -g status-right '#{prefix_highlight} '
+set -g status-right-length 10
+set -g status-attr dim
+
+set -g status-fg white
+set -g status-bg default
+set -g window-status-current-fg white
+set -g window-status-current-bg blue
+
+#
+# User defined overrides
+#
+
+if '[ -f ~/.tmux.conf.local ]' 'source ~/.tmux.conf.local'
+
+setw -g mode-keys vi
+
+set -g renumber-windows on
+set -g base-index 1
+setw -g pane-base-index 1
+
+#
+# Plugins
+#
+
+set -g @plugin 'tmux-plugins/tpm'
+# https://github.com/tmux-plugins/tpm
+
+set -g @plugin 'tmux-plugins/tmux-sensible'
+# https://github.com/tmux-plugins/tmux-sensible
+
+set -g @plugin 'tmux-plugins/tmux-pain-control'
+# https://github.com/tmux-plugins/tmux-pain-control
+
+set -g @plugin 'tmux-plugins/tmux-yank'
+# https://github.com/tmux-plugins/tmux-yank
+  set -g @shell_mode 'vi'
+
+set -g @plugin 'tmux-plugins/tmux-copycat'
+# https://github.com/tmux-plugins/tmux-copycat
+
+# set -g @plugin 'tmux-plugins/tmux-cpu'
+# # https://github.com/tmux-plugins/tmux-cpu
+
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
+# https://github.com/tmux-plugins/tmux-prefix-highlight
+  set -g @prefix_highlight_bg 'red'
+
+set -g @plugin 'nhdaly/tmux-better-mouse-mode'
+# https://github.com/NHDaly/tmux-better-mouse-mode
+
+set -g @plugin 'tmux-plugins/tmux-open'
+# https://github.com/tmux-plugins/tmux-open
+
+set -g @plugin 'jbnicolai/tmux-fpp'
+# https://github.com/tmux-plugins/tmux-fpp
+
+run '~/.tmux/plugins/tpm/tpm'
+
+#
+# Keybindings
+#
+
+bind C-q last-window # quick window toggle
+bind -n C-l send-keys C-l \; run 'sleep 0.1' \; clear-history # clear both screen and history
+bind c new-window -n './' # set new window name
+bind R source-file ~/.tmux.conf \; display-message "Config reloaded" # reload config

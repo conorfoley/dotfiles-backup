@@ -1,0 +1,69 @@
+# -*- mode: shell-script -*-
+
+update
+upgrade
+
+# Install brew tools
+
+## editor and shell
+install zsh
+install bash
+
+## editor
+install vim
+tap d12frosted/emacs-plus
+install emacs-plus
+
+## languages
+install erlang
+install ocaml
+install python
+install sbcl
+
+## search and filter
+install ack
+install ag
+install pt
+install rg
+install jq
+tap homebrew/dupes
+install homebrew/dupes/grep
+
+## version control
+install git
+install hub
+
+## list files
+install exa
+install tree
+
+## utility
+install findutils # GNU `find`, `xargs`, and `locate`
+install coreutils # GNU File, Shell, and Text utilities
+install rlwrap
+install wget
+install tmux
+install reattach-to-user-namespace # reattach process (e.g., tmux) to background
+
+# platform
+install heroku-toolbelt
+
+# Install homebrew-cask
+
+tap phinze/homebrew-cask
+install brew-cask
+
+# Install macOS apps
+
+cask --appdir="/Applications" \
+  alfred \
+  google-drive \
+  one-password \
+  iterm2 \
+  spotify \
+  slate \
+  sublime-text
+
+# Remove outdated versions from the cellar
+
+cleanup

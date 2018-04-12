@@ -1,0 +1,77 @@
+# -*- mode: shell-script -*-
+
+# shortcut to this dotfiles path is $ZSH
+export ZSH=$HOME/.dotfiles
+export PROJECTS=$HOME/Projects
+
+# use gnu manpages
+export HELPDIR=/usr/local/share/zsh/help
+
+# postgres config
+export LC_ALL=en_US.UTF-8
+export PGDATA=/usr/local/var/postgres
+
+# erlang repl history
+export ERL_AFLAGS="-kernel shell_history enabled"
+export ELIXIR_ERL_OPTIONS=$ERL_AFLAGS
+
+# elm
+export ELM_HOME=/usr/local/lib/node_modules/elm
+
+# this lets `read` and `vared` backspace properly
+if [[ $(ps -o comm= $PPID) = iterm ]]; then
+  stty erase '^?'
+fi
+
+# all of our zsh files
+typeset -U config_files
+config_files=($ZSH/*/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}; do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+autoload -U zmv
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}; do
+  source $file
+done
+
+unset config_files
+
+# source optional profiles
+typeset -U files
+files=(
+  # torch
+  $HOME/torch/install/bin/torch-activate
+  $HOME/torch-cl/install/bin/torch-activate
+  # iterm
+  $HOME/.iterm2_shell_integration.zsh
+  # ocaml
+  $HOME/.opam/opam-init/init.zsh
+  # rust
+  $HOME/.cargo/bin
+  # profile
+  $HOME/.profile
+  $HOME/.zshprofile
+  # env
+  $HOME/.zshenv
+)
+for file in $files; do
+  if [[ -e $file ]]; then
+    source $file
+  fi
+done
+
+unset files

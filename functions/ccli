@@ -1,0 +1,6 @@
+# -*- mode: shell-script -*-
+
+ccli() {
+  if [ -z $1 ]; then chrome-cli --help; fi;
+  chrome-cli $argv
+}
