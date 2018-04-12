@@ -44,6 +44,7 @@ install rlwrap
 install wget
 install tmux
 install reattach-to-user-namespace # reattach process (e.g., tmux) to background
+install caskroom/cask/hammerspoon
 
 # platform
 install heroku-toolbelt
