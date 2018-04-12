@@ -1,7 +1,3 @@
-#!/bin/sh
-#
-# Homebrew
-#
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
@@ -11,78 +7,9 @@ if [ "$(uname -s)" != "Darwin" ]; then
 fi
 
 # Check for Homebrew
-# TODO: automate homebrew installation with: https://gist.github.com/trinitronx/6217746
-
-if test ! $(which brew); then
+if [ ! $(which brew) ]; then
   echo "installing homebrew..."
-  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-# Install GNU core utilities (those that come with macOS are outdated)
-
-brew install coreutils
-echo "Don’t forget to add $(brew --prefix coreutils)/libexec/gnubin to \$PATH."
-
-# Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
-
-brew install findutils
-
-# Install Bash 4
-
-brew install bash
-
-# Install more recent versions of some macOS tools
-
-brew tap homebrew/dupes
-brew install homebrew/dupes/grep
-
-# Install other useful binaries
-
-brew install zsh
-brew install ack
-brew install git
-brew install rename
-brew install tree
-brew install webkit2png
-brew install zopfli
-brew install ffmpeg
-brew install graphicsmagick
-brew install mackup
-brew install hub
-brew install python
-brew install sshfs
-
-# Install homebrew-cask
-
-brew tap phinze/homebrew-cask
-brew install brew-cask
-
-# Install macOS apps
-
-brew cask install --appdir="/Applications" \
-  app-cleaner \
-  firefox \
-  flash \
-  google-chrome \
-  iterm2 \
-  one-password \
-  spotify \
-  sublime-text \
-  vagrant \
-  virtualbox \
-  vlc
-
-# Remove outdated versions from the cellar
-
-brew cleanup
-
-# Add macOS specific command line tools
-
-if test ! $(which subl); then
-  ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
-fi
-
-# Install spot
-if test ! $(which spot); then
-  curl -L https://raw.github.com/guille/spot/master/spot.sh -o /usr/local/bin/spot && chmod +x /usr/local/bin/spot
-fi
+brew bundle $DOTFILES/macos/Brewfile

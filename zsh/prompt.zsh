@@ -1,80 +1,51 @@
 # Adapted from code found at <https://gist.github.com/1712320>.
 
-# TODO   git branch is only showing up when there is also a remote repository
-#        does not show when repository is local only :/
-#
-#        EDIT: Will show local branches, after initial commit.
+# setup
 
+autoload colors; colors;
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
 setopt prompt_subst
-autoload -U colors && colors
 
-# Modify the colors and symbols in these variables as desired.
-GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
-GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
-GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
-GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
-GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
-GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}⚡︎%{$reset_color%}"
-GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
-GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}●%{$reset_color%}"
-GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
+# prompt
 
-# Show Git branch/tag, or name-rev if on detached head
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}["
+ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+# show git branch/tag, or name-rev if on detached head
 parse_git_branch() {
-  (hub symbolic-ref -q HEAD || hub name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+  (command git symbolic-ref -q HEAD || command git name-rev --name-only --no-undefined --always HEAD) 2>/dev/null
 }
 
-# Show different symbols as appropriate for various Git repository states
-parse_git_state() {
-
-  # Compose this value via multiple conditional appends.
-  local GIT_STATE=""
-
-  local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
-  if [ "$NUM_AHEAD" -gt 0 ]; then
-    GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
+# show red star if there are uncommitted changes
+parse_git_dirty() {
+  if command git diff-index --quiet HEAD 2> /dev/null; then
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   fi
-
-  local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
-  if [ "$NUM_BEHIND" -gt 0 ]; then
-    GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
-  fi
-
-  local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
-  if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
-    GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
-  fi
-
-  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
-    GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
-  fi
-
-  if ! git diff --quiet 2> /dev/null; then
-    GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
-  fi
-
-  if ! git diff --cached --quiet 2> /dev/null; then
-    GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
-  fi
-
-  if [[ -n $GIT_STATE ]]; then
-    echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
-  fi
-
 }
 
-# If inside a Git repository, print its branch and state
-git_prompt_string() {
+# if in a git repo, show dirty indicator + git branch
+git_custom_status() {
   local git_where="$(parse_git_branch)"
-  [ -n "$git_where" ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+  [ -n "$git_where" ] && echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX${git_where#(refs/heads/|tags/)}$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-parse_git_branch () {
-  # Branch format found in regex at end of line: [branch]
-  hub branch 2> /dev/null | /usr/bin/grep "*" | sed -e 's/* \(.*\)/\1/g'
+# show current rbenv version if different from rbenv global
+rbenv_version_status() {
+  local ver=$(rbenv version-name)
+  [ "$(rbenv global)" != "$ver" ] && echo "[$ver]"
 }
 
-function precmd() {
-  export PROMPT="%{$fg[blue]%}%~ $(git_prompt_string)
-%{$fg[white]%}λ %{$reset_color%}: "
-}
+# put fancy stuff on the right
+if which rbenv &> /dev/null; then
+  RPS1='$(git_custom_status)%{$fg[red]%}$(rbenv_version_status)%{$reset_color%} $EPS1'
+else
+  RPS1='$(git_custom_status) $EPS1'
+fi
+
+# basic prompt on the left
+PROMPT='%{$fg[blue]%}%~% %(?.%{$fg[green]%}.%{$fg[red]%})%B
+%{$fg[white]%}λ%b %{$reset_color%}: '

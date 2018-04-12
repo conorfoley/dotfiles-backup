@@ -1,32 +1,33 @@
-if [ ! -x `which n` ]; then
-  manage install visionmedia/n
-fi
-
-if [ ! -x `which node` ]; then
-  n latest
-fi
-
-# Install useful deps
+if [ ! `which n` ]; then manage install visionmedia/n; fi
+if [ ! `which node` ]; then n latest; fi
+if [ ! `which yarn` ]; then npm i -g yarn; fi
 
 # utility
-npm install -g poe
-npm install -g prettyjson
-npm install -g tldr
+
+yarn global add tldr
+
+# formatting
+
+yarn global add prettyjson
+yarn global add prettier
+yarn global add nd
 
 # node
-npm install -g nd
-npm install -g tern
-npm install -g webpack
-npm install -g yarn
 
-# server
-npm install -g serve
-npm install -g startup
+yarn global add tern
+yarn global add webpack
+
+# servers
+
+yarn global add serve
 
 # testing
-npm install -g mocha
+
+yarn global add mocha
+yarn global add jest
 
 # typescript
-npm install -g tslint
-npm install -g typescript
-npm install -g typescript-formatter
+
+yarn global add tslint
+yarn global add typescript
+yarn global add typescript-formatter

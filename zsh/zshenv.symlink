@@ -1,5 +1,3 @@
-# -*- mode: shell-script -*-
-
 export MANPATH=''
 
 manpaths=(

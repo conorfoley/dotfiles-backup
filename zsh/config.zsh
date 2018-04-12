@@ -1,4 +1,3 @@
-
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 
@@ -28,9 +27,9 @@ setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share 
 setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
 
-#If a pattern for filename generation has no matches, print an error,
-#instead of leaving it unchanged in the argument list. This also
-#applies to file expansion of an initial ~ or =.
+# If a pattern for filename generation has no matches, print an error,
+# instead of leaving it unchanged in the argument list. This also
+# applies to file expansion of an initial ~ or =.
 unsetopt nomatch
 
 # don't expand aliases _before_ completion has finished

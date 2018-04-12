@@ -1,4 +1,1 @@
-# -*- mode: shell-script -*-
-
-# dotfiles
-alias sz="source ~/.zshrc"
+alias sz="source ~/.zshrc" # reload dotfiles

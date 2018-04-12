@@ -1,4 +1,4 @@
-
+# Install simple binary helper
 if test ! $(which manage); then
   mkdir /tmp/manage
   cd /tmp/manage

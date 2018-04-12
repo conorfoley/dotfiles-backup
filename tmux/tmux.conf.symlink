@@ -7,9 +7,7 @@ set -s escape-time 10                     # faster command sequences
 set -sg repeat-time 600                   # increase repeat timeout
 set -s focus-events on
 
-#
-# Display
-#
+# display
 
 set -g display-panes-time 800 # slightly longer pane indicators display time
 set -g display-time 1000 # slightly longer status messages display time
@@ -27,9 +25,7 @@ set -g status-bg default
 set -g window-status-current-fg white
 set -g window-status-current-bg blue
 
-#
-# User defined overrides
-#
+# user defined overrides
 
 if '[ -f ~/.tmux.conf.local ]' 'source ~/.tmux.conf.local'
 
@@ -39,9 +35,7 @@ set -g renumber-windows on
 set -g base-index 1
 setw -g pane-base-index 1
 
-#
-# Plugins
-#
+# plugins
 
 set -g @plugin 'tmux-plugins/tpm'
 # https://github.com/tmux-plugins/tpm
@@ -77,9 +71,7 @@ set -g @plugin 'jbnicolai/tmux-fpp'
 
 run '~/.tmux/plugins/tpm/tpm'
 
-#
-# Keybindings
-#
+# keybindings
 
 bind C-q last-window # quick window toggle
 bind -n C-l send-keys C-l \; run 'sleep 0.1' \; clear-history # clear both screen and history

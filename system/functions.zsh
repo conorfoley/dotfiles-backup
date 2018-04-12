@@ -85,23 +85,6 @@ function k() {
 
 # search
 
-function gre() {
-  local ignored=$(get_ignored)
-  local dirs=$(sed -n 1p <<< $ignored)
-  local results=$(
-    map_to_option '--exclude-dir' $dirs \
-      | xargs -J % /usr/bin/grep % $@
-  )
-
-  if [ $results ]; then
-    while read line; do
-      local file=$(cut -d ':' -f1 <<< $line)
-      git check-ignore -q $file
-      test $? != 0 && echo $line
-    done <<< $results
-  fi
-}
-
 function tree() {
   set -A array
   array+=".git"
@@ -117,42 +100,6 @@ function tree() {
   IFS="|"
   /usr/local/bin/tree -I "${array[*]}" -a --dirsfirst $@
   unset $array
-}
-
-function get_ignored() {
-  local patterns=$(
-    cat ~/.dotfiles/git/gitignore \
-      | /usr/bin/grep -v '^#'
-  )
-
-  patterns+=$(
-    find . -maxdepth 3 -name '.gitignore' -type f -exec \
-      sed "s,\(.*\),{}\1," {} \; \
-        | /usr/bin/grep -v '^#' \
-        | sed 's,\.gitignore,,' \
-        | sed 's,^\.\/\(.*\),\1,'
-  )
-
-  local ignores=''
-  local dirs='.git '
-  while read f; do
-    if [ -d $f ]; then
-      dirs+="$f "
-    else
-      ignores+="$f "
-    fi
-  done <<< $(tr -s '\n' <<< $patterns)
-
-  echo "$dirs\n$ignores"
-}
-
-function map_to_option() {
-  local option=$1
-  local list=$(tr ' ' '\n' <<< $2)
-
-  echo $list \
-    | sed "s,\(.*\),$option=\1," \
-    | tr '\n' ' '
 }
 
 function rows_to_list() {
