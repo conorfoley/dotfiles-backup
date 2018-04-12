@@ -1,6 +1,8 @@
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
+user () { printf "\r  [ \033[0;33m?\033[0m ] $1 "; }
+
 # Only run if on a Mac
 if [ "$(uname -s)" != "Darwin" ]; then
   exit 0
@@ -12,4 +14,88 @@ if [ ! $(which brew) ]; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-brew bundle $DOTFILES/macos/Brewfile
+brew update
+brew upgrade
+
+# Install brew tools
+
+## utility
+brew install coreutils # https://www.gnu.org/software/coreutils -- GNU File, Shell, and Text utilities
+brew install findutils # https://www.gnu.org/software/findutils -- GNU `find`, `xargs`, and `locate`
+brew install moreutils # https://joeyh.name/code/moreutils
+brew install gnu-sed --with-default-names # GNU `sed`, overwriting the built-in `sed`
+brew install rlwrap
+brew install rename
+brew install wget
+brew install tmux
+brew install imagemagick --with-webp
+brew install reattach-to-user-namespace # reattach process (e.g., tmux) to background
+brew install caskroom/cask/hammerspoon
+
+## terminal
+brew install bash
+brew install bash-completion2
+brew install zsh
+brew install zsh-completions
+# Switch to using brew-installed zsh and bash
+if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then echo '/usr/local/bin/bash' | sudo tee -a /etc/shells; fi
+if ! fgrep -q '/usr/local/bin/zsh' /etc/shells; then echo '/usr/local/bin/zsh' | sudo tee -a /etc/shells; fi
+# Use brew zsh as default shell
+chsh -s /usr/local/bin/zsh
+
+## editor
+brew install vim --with-override-system-vi
+brew install d12frosted/emacs-plus --HEAD --with-natural-title-bars
+
+## languages
+brew install erlang
+brew install lua
+brew install ocaml
+brew install python
+brew install sbcl
+
+## search and filter
+brew install ack
+brew install ag
+brew install pt
+brew install rg
+brew install jq
+brew install homebrew/dupes/grep
+brew install tree
+
+## version control
+brew install git
+brew install hub
+
+## list files
+brew install exa
+brew install tree
+
+# platform
+brew install heroku-toolbelt
+
+# Install macOS apps
+brew tap caskroom/cask
+brew cask --appdir="/Applications" \
+  alfred \
+  one-password \
+  iterm2 \
+  spotify \
+  slate \
+  sublime-text
+
+brew cask --appdir="/Applications" google-drive
+# Link the drive's root directories to home
+if [ -d ~/Drive ]; then
+  for path in ~/Drive/*; do
+    if [ ! -d $path ]; then continue; fi
+    file="${path/$HOME\/Drive\/}"
+    if [[ $file =~ '[0-9A-Z]\.*' ]]; then continue; fi
+    target=~/$file
+    if [ -e $target ]; then continue; fi
+    ln -s $path $target
+  done
+fi
+
+# Remove outdated versions from the cellar
+brew cleanup

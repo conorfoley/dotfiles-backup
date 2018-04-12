@@ -5,26 +5,14 @@
 
 -- Specify Spoons which will be loaded
 hspoon_list = {
-  -- "AClock",
-  -- "BingDaily",
-  -- "CircleClock",
-  -- "ClipShow",
-  -- "CountDown",
-  -- "HCalendar",
-  -- "HSaria2",
-  -- "HSearch",
-  "SpeedMenu",
-  -- "_win_win",
-  -- "_fnMate",
 }
 
 -- appM environment keybindings. Bundle `id` is prefered, but application `name` will be ok.
 hsapp_list = {
-  -- {key = 'i', name = 'iTerm'},
 }
 
 -- A global variable for the sub-key Hyper Mode
-k = hs.hotkey.modal.new({}, 'f17')
+k = hs.hotkey.modal.new({}, 'F17')
 
 -- Hyper-key for all the below are setup somewhere... Usually Keyboard Maestro or similar. Alfred doesn't handle them very well, so will set up separate bindings for individual apps below.
 hyper_bindings = {
@@ -82,18 +70,19 @@ hyper_bindings = {
 }
 
 for i,key in ipairs(hyper_bindings) do
-  k:bind({}, key, nil, function() hs.eventtap.keyStroke({'cmd','alt','ctrl'}, key)
+  k:bind({}, key, nil, function()
+      hs.eventtap.keyStroke({'cmd','alt','ctrl'}, key)
       k.triggered = true
   end)
 end
 
--- Enter Hyper Mode when _f18 is pressed
+-- Enter Hyper Mode when F18 is pressed
 pressed_f18 = function()
   k.triggered = false
   k:enter()
 end
 
--- Leave Hyper Mode when _f18 is pressed,
+-- Leave Hyper Mode when F18 is pressed,
 --   send ESCAPE if no other keys are pressed.
 released_f18 = function()
   k:exit()
@@ -118,4 +107,5 @@ function reload_config(files)
   end
 end
 
-local my_watcher = hs.pathwatcher.new(os.getenv('HOME') .. '/.hammerspoon/', reload_config):start()
+local my_watcher_init = hs.pathwatcher.new(os.getenv('HOME') .. '/.hammerspoon/init.lua', reload_config):start()
+local my_watcher_config = hs.pathwatcher.new(os.getenv('HOME') .. '/.dotfiles/hammerspoon/config.lua', reload_config):start()

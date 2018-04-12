@@ -5,8 +5,9 @@ manpaths=(
   /opt/X11/share/man
   /usr/share/man
   /usr/local/share/man
-  /usr/local/opt/findutils/libexec/gnuman
   /usr/local/opt/coreutils/libexec/gnuman
+  /usr/local/opt/findutils/libexec/gnuman
+  /usr/local/opt/moreutils/libexec/gnuman
 )
 
 for mp in $manpaths; do
@@ -27,8 +28,9 @@ pathdirs=(
   /usr/local/heroku/bin
   /usr/local/lib/python2.7/site-packages
   /usr/local/opt/autoconf/bin
-  /usr/local/opt/findutils/libexec/gnubin
   /usr/local/opt/coreutils/libexec/gnubin
+  /usr/local/opt/findutils/libexec/gnubin
+  /usr/local/opt/moreutils/libexec/gnubin
   /usr/local/bin
   /usr/local/sbin
   $HOME/bin
@@ -38,17 +40,19 @@ pathdirs=(
   $HOME/.cargo/bin
 )
 for dir in $pathdirs; do
-  if [[ -d $dir ]] && [[ :$PATH: != *":$dir:"* ]]; then
+  if [ -d $dir ] && [[ :$PATH: != *":$dir:"* ]]; then
     PATH="$dir:$PATH"
   fi
 done
 
-for core_bin in /usr/local/opt/coreutils/libexec/gnubin/*(X); do
-  local local_bin=${core_bin##*/}
-  local local_gbin=g$local_bin
-  local local_root=/usr/local/bin
-  if [ -x $root/$local_gbin ]; then
-    ln -s $root/$local_gbin $root/$local_bin 2>/dev/null
-    ln -s `man $local_gbin -w` `man $local_gbin -w | /usr/bin/sed "s,/$local_gbin.1$,/$local_bin.1,"`
-  fi
-done
+load_bins() {
+  for core_bin in /usr/local/opt/coreutils/libexec/gnubin/*(X); do
+    local local_bin=${core_bin##*/}
+    local local_gbin=g$local_bin
+    local local_root=/usr/local/bin
+    if [ -x $root/$local_gbin ]; then
+      ln -s $root/$local_gbin $root/$local_bin 2>/dev/null
+      ln -s `man $local_gbin -w` `man $local_gbin -w | /usr/bin/sed "s,/$local_gbin.1$,/$local_bin.1,"`
+    fi
+  done
+}

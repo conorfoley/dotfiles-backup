@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 # Run all dotfiles installers.
 
 set -e
@@ -9,10 +8,10 @@ __dirname=$(dirname $0)
 
 # Install OS specific code
 while true; do
-  read -p "What operating system are you on (macOS, ubuntu)? " os
+  read -p "What operating system are you on? [macOS, ubuntu] " os
   case $os in
-    "macOS" ) echo "bootstrapping macOS..."; sh $__dirname/macos/bootstrap; break;;
-    "ubuntu" ) echo "bootstrapping ubuntu..."; sh $__dirname/ubuntu/bootstrap; break;;
+    mac|macos|macOS) echo "bootstrapping macOS..."; sh $__dirname/macos/bootstrap; break;;
+    ubuntu) echo "bootstrapping ubuntu..."; sh $__dirname/ubuntu/bootstrap; break;;
     * ) echo "please enter a valid operating system"
   esac
 done
@@ -20,7 +19,7 @@ echo
 
 ./manage/install.sh
 
-# find the installers and run them iteratively
+# Find the installers and run them iteratively
 find $__dirname -name install.sh \
-  | /usr/bin/grep -v -e manage \
+  | /usr/bin/grep -ve manage \
   | while read installer ; do sh -c "${installer}" ; done
