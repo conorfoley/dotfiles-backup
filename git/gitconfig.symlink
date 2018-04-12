@@ -177,10 +177,6 @@
 
   path = ~/.gitprofile
 
-[user]
-
-  name = Michael Vanasse
-
 # URL shorthands
 
 [url "git@github.com:"]

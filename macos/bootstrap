@@ -24,6 +24,7 @@ brew install coreutils # https://www.gnu.org/software/coreutils -- GNU File, She
 brew install findutils # https://www.gnu.org/software/findutils -- GNU `find`, `xargs`, and `locate`
 brew install moreutils # https://joeyh.name/code/moreutils
 brew install gnu-sed --with-default-names # GNU `sed`, overwriting the built-in `sed`
+brew install gnupg
 brew install rlwrap
 brew install rename
 brew install wget
