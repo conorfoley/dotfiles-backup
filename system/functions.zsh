@@ -23,23 +23,49 @@ function relpath() {
 # display
 
 function lsr() {
+  local cwd=$PWD
+
   local ignore=(
-    .\#*
-    \#*
-    *~
-    __*
     *.lock
     *.log
-    .*.log
     *.tmp
     *_history
-    .DS_Store
-    .tern-port
-    .git
-    package-lock.json
+    *~
+    .*.log
+    .\#*
+    .tmp.drivedownload # Google Drive tmp file
+    .DS_Store # macOS tmp file
+    \#*
+    __*
     tmp
-    node_modules
   )
+
+  # if in home directory
+  if [[ $cwd == $HOME ]]; then
+    ignore+=(
+      .Trash
+      .CFUserTextEncoding
+      .iterm2_shell_integration*
+      .zcompdump*
+    )
+  fi
+
+  # if in node project
+  if [ -e $cwd/package.json ]; then
+    ignore+=(
+      node_modules
+      package-lock.json
+      yarn-lock.json
+      .tern-port
+    )
+  fi
+
+  # if in git project
+  if [ -e $cwd/.git ]; then
+    ignore+=(
+      .git
+    )
+  fi
 
   local ignore_glob=${(j:|:)ignore}
 

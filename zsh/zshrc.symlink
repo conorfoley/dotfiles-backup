@@ -1,6 +1,8 @@
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
+export DOTFILES=$ZSH
 export PROJECTS=$HOME/Projects
+export EDITOR=emacs
 
 # use gnu manpages
 export HELPDIR=/usr/local/share/zsh/help
@@ -72,4 +74,5 @@ for file in $files; do
   fi
 done
 
+unset file
 unset files

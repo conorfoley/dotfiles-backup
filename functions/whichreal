@@ -1,0 +1,10 @@
+# -*- mode: shell-script -*-
+
+function whichreal() {
+  local path=$(which $@)
+  if [ $? -eq 0 ]; then
+    /usr/local/bin/grealpath $path
+  else
+    echo $path
+  fi
+}

@@ -8,3 +8,42 @@ indent_size = 2
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+max_line_length = 80
+
+[*.vim]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.rb]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.el]
+indent_style = space
+max_line_length = 80
+
+[Makefile]
+indent_style = tab
+tab_width = 4
+
+[.gitmodules]
+indent_style = tab
+tab_width = 4
+
+[{.editorconfig,editorconfig.symlink}]
+file_type_emacs = editorconfig-conf
+
+[*.md]
+trim_trailing_whitespace = false
+
+[.env*]
+file_type_emacs = conf

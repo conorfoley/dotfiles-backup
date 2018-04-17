@@ -9,6 +9,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " Tools
+Plugin 'editorconfig/editorconfig-vim'
 Plugin 'tmux-plugins/vim-tmux-focus-events'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-eunuch'

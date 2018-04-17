@@ -1,6 +1,10 @@
 export MANPATH=''
 
 manpaths=(
+  $(mdfind -onlyin / "kind:folder" -name man1 | /usr/bin/sed -E 's,/man1,,')
+)
+
+manpaths+=(
   /Library/TeX/Distributions/.DefaultTeX/Contents/Man
   /opt/X11/share/man
   /usr/share/man
@@ -16,9 +20,14 @@ for mp in $manpaths; do
   fi
 done
 
+unset manpath
+unset manpaths
+
 MANPATH=`echo $MANPATH | /usr/bin/sed 's/:$//' | /usr/bin/sed 's/:*/:/' | /usr/bin/sed 's/^://'`
 
-pathdirs=(
+pathdirs=($(mdfind -onlyin ~ "kind:folder" -name bin | grep -vE "($HOME/(Drive|Documents|Music|Library/Application\ Support)|/node_modules/|/tmp/)"))
+
+pathdirs+=(
   /bin
   /sbin
   /opt/bin
@@ -38,21 +47,28 @@ pathdirs=(
   $HOME/.mix/escripts
   $HOME/.zfunc
   $HOME/.cargo/bin
+  $HOME/.gem/bin
 )
-for dir in $pathdirs; do
-  if [ -d $dir ] && [[ :$PATH: != *":$dir:"* ]]; then
-    PATH="$dir:$PATH"
+
+for pathdir in $pathdirs; do
+  if [ -e $pathdir ] && [[ :$PATH: != *":$pathdir:"* ]]; then
+    PATH="$pathdir:$PATH"
   fi
 done
 
-load_bins() {
+unset pathdir
+unset pathdirs
+
+function load_bins {
+  local local_root=/usr/local/bin
   for core_bin in /usr/local/opt/coreutils/libexec/gnubin/*(X); do
     local local_bin=${core_bin##*/}
-    local local_gbin=g$local_bin
-    local local_root=/usr/local/bin
-    if [ -x $root/$local_gbin ]; then
-      ln -s $root/$local_gbin $root/$local_bin 2>/dev/null
-      ln -s `man $local_gbin -w` `man $local_gbin -w | /usr/bin/sed "s,/$local_gbin.1$,/$local_bin.1,"`
+    local local_gbin="g$local_bin"
+    if [ -x $local_root/$local_gbin ]; then
+      test ! -e $local_root/$local_bin && ln -s $local_root/$local_gbin $local_root/$local_bin 2>/dev/null
+      ln -s `man $local_gbin -w` `man $local_gbin -w | /usr/bin/sed "s,/$local_gbin.1$,/$local_bin.1,"` 2>/dev/null
     fi
   done
 }
+
+# load_bins

@@ -1,3 +1,24 @@
+set-tab-title() {
+  local title_format{,ted}
+  zstyle -s ':prezto:module:terminal:tab-title' format 'title_format' || title_format="%s"
+  zformat -f title_formatted "$title_format" "s:$argv"
+
+  printf "\e]1;%s\a" ${(V%)title_formatted}
+}
+
+tmux_current_session() {
+  if [ -z $TMUX ]; then
+    >&2 echo "not in tmux session."
+    exit 1
+  fi
+
+  cut -d ',' -f1 <<< $TMUX
+}
+
+tmux_run() {
+  tmux -S $(tmux_current_session) "$@"
+}
+
 tmka() {
   tmux kill-server 2>/dev/null
   test $? -gt 0 && >&2 echo "no tmux sessions"
@@ -55,7 +76,7 @@ tmux_relative_cwd() {
     else
       local_path=./$relative_path
     fi
-    set-window-title $local_path
+    tmux_run rename-window $local_path
   fi
 }
 
@@ -133,26 +154,4 @@ find_project() {
     >&2 echo "no projects found"
     return 1
   fi
-}
-
-function set-tab-title() {
-  local title_format{,ted}
-  zstyle -s ':prezto:module:terminal:tab-title' format 'title_format' || title_format="%s"
-  zformat -f title_formatted "$title_format" "s:$argv"
-
-  printf "\e]1;%s\a" ${(V%)title_formatted}
-}
-
-function set-window-title() {
-  local title_format{,ted}
-  zstyle -s ':prezto:module:terminal:window-title' format 'title_format' || title_format="%s"
-  zformat -f title_formatted "$title_format" "s:$argv"
-
-  if [[ "$TERM" == screen* ]]; then
-    title_format="\ek%s\e\\"
-  else
-    title_format="\e]2;%s\a"
-  fi
-
-  printf "$title_format" "${(V%)title_formatted}"
 }

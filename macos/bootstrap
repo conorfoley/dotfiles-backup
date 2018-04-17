@@ -1,8 +1,6 @@
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
-user () { printf "\r  [ \033[0;33m?\033[0m ] $1 "; }
-
 # Only run if on a Mac
 if [ "$(uname -s)" != "Darwin" ]; then
   exit 0
@@ -46,7 +44,8 @@ chsh -s /usr/local/bin/zsh
 
 ## editor
 brew install vim --with-override-system-vi
-brew install d12frosted/emacs-plus --HEAD --with-natural-title-bars
+brew install neovim
+brew install d12frosted/emacs-plus --HEAD --with-natural-title-bars --with-24-bit-color --with-ctags --with-dbus --with-mailutils --with-x11
 
 ## languages
 brew install erlang
