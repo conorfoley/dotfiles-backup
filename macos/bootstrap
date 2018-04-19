@@ -82,7 +82,11 @@ brew cask --appdir="/Applications" \
   iterm2 \
   spotify \
   slate \
-  sublime-text
+  sublime-text \
+  istatmenu \
+  timing \
+  little-snitch \
+  micro-snitch
 
 brew cask --appdir="/Applications" google-drive
 # Link the drive's root directories to home
