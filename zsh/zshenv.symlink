@@ -25,8 +25,6 @@ unset manpaths
 
 MANPATH=`echo $MANPATH | /usr/bin/sed 's/:$//' | /usr/bin/sed 's/:*/:/' | /usr/bin/sed 's/^://'`
 
-pathdirs=($(mdfind -onlyin ~ "kind:folder" -name bin | grep -vE "($HOME/(Drive|Documents|Music|Library/Application\ Support)|/node_modules/|/tmp/)"))
-
 pathdirs+=(
   /bin
   /sbin
@@ -50,14 +48,29 @@ pathdirs+=(
   $HOME/.gem/bin
 )
 
-for pathdir in $pathdirs; do
-  if [ -e $pathdir ] && [[ :$PATH: != *":$pathdir:"* ]]; then
+function load_path {
+  if [ -d $1 ] && [[ :$PATH: != *":$pathdir:"* ]]; then
     PATH="$pathdir:$PATH"
   fi
+}
+
+for pathdir in $pathdirs; do
+  load_path $pathdir
 done
+
+while read pathdir; do
+  load_path $pathdir
+done <<< `
+  mdfind \
+    -onlyin ~ \
+    'kMDItemKind == "Folder" && (kMDItemFSName == "bin" || kMDItemFSName == "ebin")' \
+    | grep -vE "($HOME/(Drive|Documents|Projects))|Application\ Support"
+`
+
 
 unset pathdir
 unset pathdirs
+unset load_path
 
 function load_bins {
   local local_root=/usr/local/bin

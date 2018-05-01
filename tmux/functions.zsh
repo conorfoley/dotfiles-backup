@@ -42,7 +42,7 @@ tmn() {
       $ZSH 1 $1 \
       $PROJECTS/$USER 1 $1 \
       $PROJECTS 2 $1 \
-      $PROJECTS 4 $1 \
+      $PROJECTS 3 $1 \
       ~ 1 $1 \
       ~ 2 $1 \
       /tmp 1 $1
@@ -137,6 +137,7 @@ find_project() {
 
   find \
     -L $directory \
+    -mindepth $depth \
     -maxdepth $depth \
     -type d \
     -regex "\(.*\)\/$query$" \
