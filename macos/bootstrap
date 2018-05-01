@@ -76,17 +76,16 @@ brew install heroku-toolbelt
 
 # Install macOS apps
 brew tap caskroom/cask
-brew cask --appdir="/Applications" \
-  alfred \
-  one-password \
-  iterm2 \
-  spotify \
-  slate \
-  sublime-text \
-  istatmenu \
-  timing \
-  little-snitch \
-  micro-snitch
+brew cask --appdir="/Applications" alfred
+brew cask --appdir="/Applications" one-password
+brew cask --appdir="/Applications" iterm2
+brew cask --appdir="/Applications" spotify
+brew cask --appdir="/Applications" sublime-text
+brew cask --appdir="/Applications" little-snitch
+brew cask --appdir="/Applications" micro-snitch
+brew cask --appdir="/Applications" istatmenu
+brew cask --appdir="/Applications" timing
+brew cask --appdir="/Applications" bartender
 
 brew cask --appdir="/Applications" google-drive
 # Link the drive's root directories to home
