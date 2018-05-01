@@ -61,12 +61,9 @@ done
 while read pathdir; do
   load_path $pathdir
 done <<< `
-  mdfind \
-    -onlyin ~ \
-    'kMDItemKind == "Folder" && (kMDItemFSName == "bin" || kMDItemFSName == "ebin")' \
+  mdfind -onlyin ~ 'kMDItemKind == "Folder" && (kMDItemFSName == "bin" || kMDItemFSName == "ebin")' \
     | grep -vE "($HOME/(Drive|Documents|Projects))|Application\ Support"
 `
-
 
 unset pathdir
 unset pathdirs
