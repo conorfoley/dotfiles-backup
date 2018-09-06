@@ -76,3 +76,11 @@ done
 
 unset file
 unset files
+
+# configure history with 'hstr'
+# https://github.com/dvorka/hstr
+export HISTFILE=$HOME/.zsh_history  # ensure history file visibility
+export HH_CONFIG=hicolor            # get more colors
+bindkey -s "\C-r" "\eqhh\n"         # bind hh to Ctrl-r (for Vi mode check doc)
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

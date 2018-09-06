@@ -2,6 +2,7 @@
 *.rbc
 *.swp
 *~
+*.rpt2_cache*
 .DS_Store
 .Spotlight-V100
 .Trashes
@@ -11,6 +12,7 @@
 .svn
 TAGS
 tags
+flycheck_*
 
 npm-debug.log
 node_modules

@@ -38,6 +38,7 @@ pathdirs+=(
   /usr/local/opt/coreutils/libexec/gnubin
   /usr/local/opt/findutils/libexec/gnubin
   /usr/local/opt/moreutils/libexec/gnubin
+  /usr/local/opt/imagemagick@6/bin
   /usr/local/bin
   /usr/local/sbin
   $HOME/bin

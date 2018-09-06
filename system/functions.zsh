@@ -1,5 +1,66 @@
 # utility
 
+function get_ignore_glob() {
+  local cwd=$PWD
+  local ignore=(
+    "*.lock"
+    "*.log"
+    "*.tmp"
+    "*_history"
+    "*~"
+    ".*.log"
+    ".\#*"
+    "\#*"
+    "__*"
+    ".tmp.drivedownload"
+    ".DS_Store"
+    ".rpt2_cache"
+    "tmp"
+  )
+
+  # if in home directory
+  if [[ $cwd == $HOME ]]; then
+    ignore+=(
+      ".Trash"
+      ".CFUserTextEncoding"
+      ".iterm2_shell_integration*"
+      ".zcompdump*"
+    )
+  fi
+
+  # if in node project
+  if [ -e $cwd/package.json ] || [ -e $cwd/mix.exs ]; then
+    ignore+=(
+      "node_modules"
+      "package-lock.json"
+      "yarn-lock.json"
+      ".tern-port"
+    )
+  fi
+
+  # if in git project
+  if [ -e $cwd/.git ]; then
+    ignore+=(
+      ".git"
+    )
+  fi
+
+  if [[ -e $cwd/mix.exs ]]; then
+    ignore+=(
+      "_build"
+      "deps"
+    )
+  fi
+
+  test -e $HOME/.gitignore && ignore+=($(cat $HOME/.gitignore | grep -vE '(\#|^$)' | xargs echo))
+  test -e $cwd/.gitignore && ignore+=($(cat $cwd/.gitignore | grep -vE '(\#|^$)' | xargs echo))
+
+  # sort globs
+  ignore=($(echo ${ignore} | tr ' ' '\n' | sort | uniq | tr '\n' ' '))
+
+  echo "${(j:|:)ignore}"
+}
+
 function relpath() {
   [[ $# -ge 1 ]] && [[ $# -le 2 ]] || return 1
   local target=${${2:-$1}:a} # replace `:a' by `:A` to resolve symlinks
@@ -23,70 +84,16 @@ function relpath() {
 # display
 
 function lsr() {
-  local cwd=$PWD
-
-  local ignore=(
-    *.lock
-    *.log
-    *.tmp
-    *_history
-    *~
-    .*.log
-    .\#*
-    .tmp.drivedownload # Google Drive tmp file
-    .DS_Store # macOS tmp file
-    \#*
-    __*
-    tmp
-  )
-
-  # if in home directory
-  if [[ $cwd == $HOME ]]; then
-    ignore+=(
-      .Trash
-      .CFUserTextEncoding
-      .iterm2_shell_integration*
-      .zcompdump*
-    )
-  fi
-
-  # if in node project
-  if [ -e $cwd/package.json ]; then
-    ignore+=(
-      node_modules
-      package-lock.json
-      yarn-lock.json
-      .tern-port
-    )
-  fi
-
-  # if in git project
-  if [ -e $cwd/.git ]; then
-    ignore+=(
-      .git
-    )
-  fi
-
-  local ignore_glob=${(j:|:)ignore}
-
   exa \
     --all \
     --group-directories-first \
-    --ignore-glob $ignore_glob \
     --long \
     --modified \
     --sort Name \
     --time-style long-iso \
+    --ignore-glob "$(get_ignore_glob)" \
     --git-ignore \
     $@
-}
-
-function cat() {
-  if [[ $# == 1 && $1 =~ '.md$' ]]; then
-    nd $1 2>/dev/null
-  else
-    /usr/local/bin/gcat "$@"
-  fi
 }
 
 # navigation
@@ -112,25 +119,15 @@ function k() {
 # search
 
 function tree() {
-  set -A array
-  array+=".git"
-
-  # don't show files that we ignore globally in git
-  array+=$(rows_to_list ~/.dotfiles/git/gitignore "|")
-
-  if [ -f .gitignore ]; then
-    # don't show files that we ignore locally in git
-    array+=$(rows_to_list .gitignore "|")
-  fi
-
-  IFS="|"
-  /usr/local/bin/tree -I "${array[*]}" -a --dirsfirst $@
-  unset $array
-}
-
-function rows_to_list() {
-  cat $1 \
-    | tr "\n" "$2" \
-    | tr -s "$2" \
-    | sed "s/\(.*\)$2$/\1/"
+  /usr/local/bin/tree \
+    -I "$(get_ignore_glob)" \
+    -C \
+    -a \
+    --dirsfirst \
+    --noreport \
+    $@ \
+    | more \
+        --raw-control-chars \
+        --quiet \
+        --force
 }
