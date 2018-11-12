@@ -1,10 +1,10 @@
 set -g default-shell /usr/local/bin/zsh
-set -g default-command "/usr/local/bin/zsh -c '. ~/.zshrc && /usr/local/bin/zsh'"
+set -g default-command "/usr/local/bin/zsh -c '. ~/.zshrc && lsr && /usr/local/bin/zsh'"
 set -g prefix C-q
 
 setw -g xterm-keys on
-set -s escape-time 10                     # faster command sequences
-set -sg repeat-time 600                   # increase repeat timeout
+set -s escape-time 10 # faster command sequences
+set -sg repeat-time 600 # increase repeat timeout
 set -s focus-events on
 
 # display
@@ -66,6 +66,11 @@ set -g @plugin 'nhdaly/tmux-better-mouse-mode' # https://github.com/NHDaly/tmux-
 set -g @plugin 'tmux-plugins/tmux-open' # https://github.com/tmux-plugins/tmux-open
 
 set -g @plugin 'jbnicolai/tmux-fpp' # https://github.com/tmux-plugins/tmux-fpp
+
+set -g @plugin 'tmux-plugins/tmux-sidebar' # https://github.com/tmux-plugins/tmux-sidebar
+  set -g @sidebar-tree-position 'right'
+  set -g @sidebar-tree-width '70'
+  set -g @sidebar-tree-command 'tree --dirsfirst --noreport -C -I "_*|.*|\#*|*.lock|*.log|build|deps|tmp|node_modules"'
 
 run '~/.tmux/plugins/tpm/tpm'
 
