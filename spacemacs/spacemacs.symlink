@@ -526,8 +526,8 @@ user code."
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
 
-  (require 'helm)
-  (setq helm-ff-skip-boring-files t)
+  ;; (require 'helm)
+  ;; (setq helm-ff-skip-boring-files t)
 
   (setq global-linum-mode nil)
   (setq global-vi-tilde-fringe-mode nil)
@@ -591,18 +591,13 @@ layers configuration. You are free to put any user code."
                       "/usr/local/opt/findutils/libexec/gnubin"
                       "/usr/local/opt/autoconf/bin"
                       "/usr/local/munki"
-                      ))
-
-  (local/add-paths '(
                       "~/bin"
                       "~/.asdf/shims"
                       "~/.config/yarn/global/link"
                       "~/.config/yarn/global/node_modules/.bin"
                       ))
 
-  (local/add-path (shell-command-to-string "npm bin --global"))
-
-  (local/add-path (shell-command-to-string "find $(brew --cellar emacs-plus) -type d -regex '.*/libexec/emacs/.*/.*'"))
+  ;; (local/add-path (shell-command-to-string "find $(brew --cellar emacs-plus) -type d -regex '.*/libexec/emacs/.*/.*'"))
 
   (if (file-readable-p "~/.spacemacsprofile")
     (load-file "~/.spacemacsprofile"))

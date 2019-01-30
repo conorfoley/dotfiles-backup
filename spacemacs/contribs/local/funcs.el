@@ -14,7 +14,11 @@
   (reverse (delete-dups (reverse list))))
 
 (defun local--delete-nondirectories (list)
-  (remove-if-not (lambda (item) (file-directory-p item)) list))
+  (remove-if
+    (lambda (item)
+      (or (equal nil (file-directory-p item))
+          (equal "" item)))
+    list))
 
 (defun local--path-denormalize (path)
   (replace-regexp-in-string "^~/" user-home-directory path))
