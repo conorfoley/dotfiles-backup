@@ -1,5 +1,3 @@
-if [ ! `which n` ]; then manage install visionmedia/n; fi
-if [ ! `which node` ]; then n latest; fi
 if [ ! `which yarn` ]; then npm i -g yarn; fi
 
 # utility

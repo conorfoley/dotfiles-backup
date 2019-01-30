@@ -67,6 +67,7 @@ values."
             "btoa" "atob"
             "it" "describe" "before" "after" "beforeEach" "afterEach" ;; mocha
             "suite" "test" "setup" "teardown" ;; mocha tdd
+            "jest" ;; jest
             "expect" ;; jasmine
             "inject" ;; angular-mock
             "angular" ;; angular
@@ -79,6 +80,9 @@ values."
             ))
        local
        lua
+       (lsp :variables
+         lsp-ui-sideline-show-hover nil
+         lsp-ui-sideline-show-code-action nil)
        (markdown :variables markdown-live-preview-engine 'vmd)
        neotree
        ;; ocaml
@@ -91,6 +95,7 @@ values."
          org-hide-leading-stars t
          org-enable-github-support t)
        osx
+       perl5
        python
        ;; pandoc
        react
@@ -241,7 +246,7 @@ It should only modify the values of Spacemacs settings."
     ;; with 2 themes variants, one dark and one light)
     dotspacemacs-themes '(
                            solarized-dark
-                           ;; solarized-light
+                           solarized-light
                            )
 
     ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -259,7 +264,7 @@ It should only modify the values of Spacemacs settings."
     ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
     ;; size to make separators look not too crappy.
     dotspacemacs-default-font '("Source Code Pro"
-                                 :size 13
+                                 :size 10
                                  :weight normal
                                  :width normal
                                  :powerline-scale 1.65
@@ -513,7 +518,6 @@ It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
   (setq exec-path-from-shell-check-startup-files nil)
 
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
   (setq exec-path (append exec-path '("/usr/local/bin")))
   )
 
@@ -546,17 +550,11 @@ layers configuration. You are free to put any user code."
 
   (add-to-list 'spacemacs-indent-sensitive-modes 'elixir-mode)
 
-  (load-file "~/Projects/mndvns/juicebox-mode/juicebox-mode.el")
-  (add-to-list 'auto-mode-alist '("\\.jb'" . juicebox-mode))
-
   (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
-
   (add-to-list 'auto-mode-alist '("\\.env\\.?.*\\'" . conf-mode))
-
   (add-to-list 'auto-mode-alist '("\\.es6\\'" . js2-mode))
 
   ;; ignore useless files
-
   (setq completion-ignored-extensions
     (delete-dups (append completion-ignored-extensions '(".DS_Store"))))
 
@@ -579,26 +577,35 @@ layers configuration. You are free to put any user code."
     (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
     (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
 
-  ;; (with-eval-after-load 'org
-  ;;   (require 'ob-dot)
-  ;;   (require 'ob-js)
-  ;;   (require 'ob-python)
-  ;;   (require 'ob-restclient)
-  ;;   (require 'ob-shell)
-  ;;   (require 'ob-org)
-  ;;   (org-babel-do-load-languages
-  ;;     'org-babel-load-languages
-  ;;     '(
-  ;;        (ditaa . t)
-  ;;        (org . t)
-  ;;        (dot . t)
-  ;;        (js . t)
-  ;;        (python . t)
-  ;;        (restclient . t)
-  ;;        (shell . t)
-  ;;        (plantuml . t)
-  ;;        )))
+  ;; set up PATH
+  (local/add-path "/Library/Tex/texbin")
 
+  (local/add-paths '(
+                      "/bin"
+                      "/sbin"
+                      "/usr/bin"
+                      "/usr/sbin"
+                      "/usr/local/bin"
+                      "/usr/local/sbin"
+                      "/usr/local/opt/imagemagick@6/bin"
+                      "/usr/local/opt/findutils/libexec/gnubin"
+                      "/usr/local/opt/autoconf/bin"
+                      "/usr/local/munki"
+                      ))
+
+  (local/add-paths '(
+                      "~/bin"
+                      "~/.asdf/shims"
+                      "~/.config/yarn/global/link"
+                      "~/.config/yarn/global/node_modules/.bin"
+                      ))
+
+  (local/add-path (shell-command-to-string "npm bin --global"))
+
+  (local/add-path (shell-command-to-string "find $(brew --cellar emacs-plus) -type d -regex '.*/libexec/emacs/.*/.*'"))
+
+  (if (file-readable-p "~/.spacemacsprofile")
+    (load-file "~/.spacemacsprofile"))
   )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -610,14 +617,27 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-  '(package-selected-packages
-     '(yapfify pyvenv org-download ob-restclient impatient-mode flycheck-rust editorconfig deft counsel-projectile counsel ivy iedit markdown-mode magit helm dash org-plus-contrib yasnippet-snippets yaml-mode xterm-color ws-butler writegood-mode winum which-key web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package unicode-input unfill tuareg toml-mode toc-org tide tagedit symon swiper stylus-mode string-inflection spaceline-all-the-icons solarized-theme smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode reveal-in-osx-finder restclient-helm restart-emacs rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-page org-mime org-ehtml org-bullets org-brain open-junk-file ob-http ob-elixir neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-javascript-flow lorem-ipsum livid-mode live-py-mode list-unicode-display link-hint launchctl jsx-mode json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ ghub gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-mix flycheck-flow flycheck-elm flycheck-credo flycheck-bashate flx-ido flow-minor-mode fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help erlang emmet-mode elm-test-runner elm-mode elisp-slime-nav dumb-jump drag-stuff dotenv-mode doom-modeline diminish diff-hl dhall-mode dactyl-mode cython-mode confluence company-web company-tern company-statistics company-shell company-restclient company-lua company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cargo browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile alchemist aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))
- '(typescript-indent-level 2))
+ '(package-selected-packages
+   (quote
+    (doom-modeline counsel-projectile counsel swiper ivy company-lsp lsp-mode visual-fill-column org-plus-contrib yapfify yaml-mode xterm-color ws-butler writegood-mode winum which-key web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package unicode-input unfill tuareg caml toml-mode toc-org tide typescript-mode tagedit stylus-mode sws-mode spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restclient-helm restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pip-requirements persp-mode pcre2el pbcopy paradox spinner ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-page git mustache ht org-mime org-ehtml web-server org-download org-bullets open-junk-file ob-restclient ob-http ob-elixir neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lua-mode lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode list-unicode-display linum-relative link-hint launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc insert-shebang indent-guide hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip flycheck-mix flycheck-elm flycheck-credo flycheck flx-ido flx fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit ghub treepy graphql with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight eshell-z eshell-prompt-extras esh-help erlang emmet-mode elm-mode elisp-slime-nav dumb-jump drag-stuff diminish diff-hl dhall-mode deft dactyl-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-restclient restclient know-your-http-well company-anaconda column-enforce-mode coffee-mode clean-aindent-mode cargo markdown-mode rust-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed anaconda-mode pythonic f alchemist s company elixir-mode pkg-info epl aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup solarized-theme dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(juicebox-anchor-face ((t (:inherit font-lock-doc-face))))
- '(juicebox-markup-face ((t (:inherit shadow :slant italic :weight thin :height 0.5 :width condensed)))))
+ )
 )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yapfify yaml-mode xterm-color ws-butler writegood-mode winum which-key web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package unicode-input unfill tuareg caml toml-mode toc-org tide typescript-mode tagedit stylus-mode sws-mode spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restclient-helm restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pip-requirements persp-mode pcre2el pbcopy paradox spinner ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-page git mustache ht org-mime org-ehtml web-server org-download org-bullets open-junk-file ob-restclient ob-http ob-elixir neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lua-mode lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode list-unicode-display linum-relative link-hint launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc insert-shebang indent-guide hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip flycheck-mix flycheck-elm flycheck-credo flycheck flx-ido flx fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit ghub treepy graphql with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight eshell-z eshell-prompt-extras esh-help erlang emmet-mode elm-mode elisp-slime-nav dumb-jump drag-stuff diminish diff-hl dhall-mode deft dactyl-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-restclient restclient know-your-http-well company-anaconda column-enforce-mode coffee-mode clean-aindent-mode cargo markdown-mode rust-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed anaconda-mode pythonic f alchemist s company elixir-mode pkg-info epl aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup solarized-theme dash))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -1,85 +1,37 @@
-export MANPATH=''
+# -*- mode: shell-script -*-
 
-manpaths=(
-  $(mdfind -onlyin / "kind:folder" -name man1 | /usr/bin/sed -E 's,/man1,,')
-)
-
-manpaths+=(
-  /Library/TeX/Distributions/.DefaultTeX/Contents/Man
-  /opt/X11/share/man
-  /usr/share/man
-  /usr/local/share/man
-  /usr/local/opt/coreutils/libexec/gnuman
-  /usr/local/opt/findutils/libexec/gnuman
-  /usr/local/opt/moreutils/libexec/gnuman
-)
-
-for mp in $manpaths; do
-  if [[ -d $mp ]] && [[ :$MANPATH: != *":$mp:"* ]]; then
-    MANPATH="$mp:$MANPATH"
-  fi
-done
-
-unset manpath
-unset manpaths
-
-MANPATH=`echo $MANPATH | /usr/bin/sed 's/:$//' | /usr/bin/sed 's/:*/:/' | /usr/bin/sed 's/^://'`
-
-pathdirs+=(
-  /bin
-  /sbin
-  /opt/bin
-  /opt/ruby/bin
-  /usr/bin
-  /usr/sbin
-  /usr/local/heroku/bin
-  /usr/local/lib/python2.7/site-packages
-  /usr/local/opt/autoconf/bin
-  /usr/local/opt/coreutils/libexec/gnubin
-  /usr/local/opt/findutils/libexec/gnubin
-  /usr/local/opt/moreutils/libexec/gnubin
-  /usr/local/opt/imagemagick@6/bin
-  /usr/local/bin
-  /usr/local/sbin
-  $HOME/bin
-  $HOME/sbin
-  $HOME/.mix/escripts
-  $HOME/.zfunc
-  $HOME/.cargo/bin
-  $HOME/.gem/bin
-)
-
-function load_path {
-  if [ -d $1 ] && [[ :$PATH: != *":$pathdir:"* ]]; then
-    PATH="$pathdir:$PATH"
+function contains {
+  local string="$1"
+  local substring="$2"
+  if test "${string#*$substring}" != "$string"; then
+    return 0 # $substring is in $string
+  else
+    return 1 # $substring is not in $string
   fi
 }
 
-for pathdir in $pathdirs; do
-  load_path $pathdir
-done
-
-while read pathdir; do
-  load_path $pathdir
-done <<< `
-  mdfind -onlyin ~ 'kMDItemKind == "Folder" && (kMDItemFSName == "bin" || kMDItemFSName == "ebin")' \
-    | grep -vE "($HOME/(Drive|Documents|Projects))|Application\ Support"
-`
-
-unset pathdir
-unset pathdirs
-unset load_path
-
-function load_bins {
-  local local_root=/usr/local/bin
-  for core_bin in /usr/local/opt/coreutils/libexec/gnubin/*(X); do
-    local local_bin=${core_bin##*/}
-    local local_gbin="g$local_bin"
-    if [ -x $local_root/$local_gbin ]; then
-      test ! -e $local_root/$local_bin && ln -s $local_root/$local_gbin $local_root/$local_bin 2>/dev/null
-      ln -s `man $local_gbin -w` `man $local_gbin -w | /usr/bin/sed "s,/$local_gbin.1$,/$local_bin.1,"` 2>/dev/null
-    fi
-  done
+function add_path {
+  if [[ $PATH != ^$1:* ]] && [[ $PATH != *:$1 ]] && ! contains $PATH :$1:; then
+    PATH="$PATH:$1"
+  fi
 }
 
-# load_bins
+# add_path /Library/Tex/texbin
+
+# add_path /bin
+# add_path /sbin
+
+# add_path /usr/bin
+# add_path /usr/sbin
+
+# add_path /usr/local/bin
+# add_path /usr/local/sbin
+# add_path /usr/local/opt
+
+# add_path ~/bin
+# add_path ~/.asdf/shims
+# add_path ~/.asdf/bin
+# add_path `npm bin --global`
+
+unset -f contains
+unset -f add_path

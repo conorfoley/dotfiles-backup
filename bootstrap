@@ -36,6 +36,14 @@ setup_gitconfig () {
   fi
 }
 
+setup_spacemacsprofile () {
+  if ! [ -f $HOME/.spacemacsprofile ]; then
+    cp spacemacs/spacemacsprofile.example $HOME/.spacemacsprofile
+  fi
+
+  success 'spacemacsprofile'
+}
+
 link_files () {
   ln -s $1 $2
   success "linked $1 to $2"
@@ -95,6 +103,7 @@ install_dotfiles () {
 }
 
 setup_gitconfig
+setup_spacemacsprofile
 install_dotfiles
 
 echo ''

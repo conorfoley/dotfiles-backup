@@ -1,3 +1,5 @@
+# -*- mode: conf -*-
+
 [alias]
 
 	# View abbreviated SHA, description, and history graph of the latest 20 commits
@@ -136,11 +138,6 @@
 	added = yellow
 	changed = green
 	untracked = cyan
-
-[commit]
-
-	# https://help.github.com/articles/signing-commits-using-gpg/
-	gpgsign = true
 
 [diff]
 

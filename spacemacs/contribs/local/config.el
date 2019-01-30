@@ -12,3 +12,5 @@
 ;; Set prompt regexp so eshell can exit.
 ;; This is necessary since our prompt has a newline.
 (setq eshell-prompt-regexp "^[^#$\n]*[ε] : ")
+
+(local/add-paths '())

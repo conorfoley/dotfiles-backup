@@ -1,3 +1,5 @@
+# -*- mode: shell-script -*-
+
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
 export DOTFILES=$ZSH
@@ -65,8 +67,6 @@ files=(
   # profile
   $HOME/.profile
   $HOME/.zshprofile
-  # env
-  $HOME/.zshenv
 )
 for file in $files; do
   if [[ -e $file ]]; then
@@ -83,4 +83,7 @@ export HISTFILE=$HOME/.zsh_history  # ensure history file visibility
 export HH_CONFIG=hicolor            # get more colors
 bindkey -s "\C-r" "\eqhh\n"         # bind hh to Ctrl-r (for Vi mode check doc)
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+  export FZF_DEFAULT_OPTS='--layout=reverse'
+fi

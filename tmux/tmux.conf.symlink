@@ -49,8 +49,6 @@ set -g @plugin 'tmux-plugins/tpm' # https://github.com/tmux-plugins/tpm
 
 set -g @plugin 'tmux-plugins/tmux-sensible' # https://github.com/tmux-plugins/tmux-sensible
 
-set -g @plugin 'tmux-plugins/tmux-pain-control' # https://github.com/tmux-plugins/tmux-pain-control
-
 set -g @plugin 'tmux-plugins/tmux-yank' # https://github.com/tmux-plugins/tmux-yank
   set -g @shell_mode 'vi'
 
@@ -71,6 +69,8 @@ set -g @plugin 'tmux-plugins/tmux-sidebar' # https://github.com/tmux-plugins/tmu
   set -g @sidebar-tree-position 'right'
   set -g @sidebar-tree-width '70'
   set -g @sidebar-tree-command 'tree --dirsfirst --noreport -C -I "_*|.*|\#*|*.lock|*.log|build|deps|tmp|node_modules"'
+
+set -g @plugin 'tmux-plugins/tmux-pain-control' # https://github.com/tmux-plugins/tmux-pain-control
 
 run '~/.tmux/plugins/tpm/tpm'
 
