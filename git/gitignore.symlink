@@ -1,26 +1,55 @@
-*.#*
-*.rbc
-*.swp
-*~
-*.rpt2_cache*
+# macos
 .DS_Store
+.MacOSX
 .Spotlight-V100
+.CFUserTextEncoding
 .Trashes
-._*
-.cache
-.ref
-.refrc
-.svn
-.lsp-session*
+.Trash
+
+# vim
+*.swp
+
+# emacs
+*.\#*
+*.lsp-session*
+*.tern-port
+*-history.eld
+.slime
 TAGS
-tags
+TODO.*
 flycheck_*
 
-npm-debug.log
+# nodejs
 node_modules
-
-deps
-
-TODO.*
-*.tern-port
 package-lock.json
+
+# elixir
+deps
+_build
+
+# $HOME
+.iterm2_shell_integration
+.z
+.zprofile
+.zcompdump*
+
+# other
+*.lock
+*.log
+*.rbc
+*.tmp
+*_history
+*~*
+.*_cache*
+.*hst
+.conf.local
+.cache
+.git
+.ref
+.refrc
+.rpt2_cache
+.svn
+.tmp.*
+__*
+tags
+tmp

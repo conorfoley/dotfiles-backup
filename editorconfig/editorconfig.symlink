@@ -1,7 +1,6 @@
 root = true
 
 [*]
-
 charset = utf-8
 indent_style = space
 indent_size = 2
@@ -23,19 +22,11 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 120
 
-[*.{yml,yaml}]
-indent_style = space
-indent_size = 2
-
 [*.el]
 indent_style = space
 max_line_length = 80
 
-[Makefile]
-indent_style = tab
-tab_width = 4
-
-[.gitmodules]
+[{Makefile,*.mk,.gitmodules}]
 indent_style = tab
 tab_width = 4
 
@@ -47,3 +38,11 @@ trim_trailing_whitespace = false
 
 [.env*]
 file_type_emacs = conf
+
+[{*.yml,*.yaml,*.scss,*.css,*rc}]
+indent_style = space
+indent_size = 2
+
+[{*.rs,*.pm,*.toml,*.svg}]
+indent_style = space
+indent_size = 4

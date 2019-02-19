@@ -1,3 +1,5 @@
+# -*- mode: shell-script -*-
+
 # Only run if we're running Ubuntu
 
 if hash lsb_release 2>/dev/null; then

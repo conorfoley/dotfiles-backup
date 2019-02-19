@@ -16,22 +16,29 @@ function add_path {
   fi
 }
 
-# add_path /Library/Tex/texbin
+add_path /Library/Tex/texbin
 
-# add_path /bin
-# add_path /sbin
+add_path /bin
+add_path /sbin
 
-# add_path /usr/bin
-# add_path /usr/sbin
+add_path /usr/bin
+add_path /usr/sbin
 
-# add_path /usr/local/bin
-# add_path /usr/local/sbin
-# add_path /usr/local/opt
+add_path /usr/local/bin
+add_path /usr/local/sbin
+add_path /usr/local/opt
 
-# add_path ~/bin
+add_path ~/bin
 # add_path ~/.asdf/shims
 # add_path ~/.asdf/bin
 # add_path `npm bin --global`
 
+# add_path ~/.config/yarn/global/node_modules/.bin
+
 unset -f contains
 unset -f add_path
+
+autoload -Uz compinit
+compinit
+. /usr/local/Cellar/asdf/0.6.3/asdf.sh
+. /usr/local/Cellar/asdf/0.6.3/etc/bash_completion.d/asdf.bash

@@ -22,12 +22,10 @@
 
 (defun local--path-denormalize (path)
   (replace-regexp-in-string "^~/" user-home-directory path))
-(defun local--path-normalize (path)
-  (replace-regexp-in-string (concat "^" user-home-directory) "~/" path))
 
 (defun local--add-path (path list)
   (if (file-directory-p path)
-    (nconc list (list (local--path-normalize path)))
+    (nconc list (list (local--path-denormalize path)))
     list))
 (defun local--add-paths (paths list)
   (seq-reduce
@@ -43,8 +41,7 @@
 (defun local--set-paths (paths)
   (setenv "PATH"
     (mapconcat 'identity
-      (local--delete-dups-keep-last
-        (mapcar 'local--path-normalize paths))
+      (local--delete-dups-keep-last paths)
       ":")))
 
 (defun local/add-path (path)

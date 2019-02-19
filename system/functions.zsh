@@ -1,65 +1,12 @@
 # utility
 
-function get_ignore_glob() {
-  local cwd=$PWD
-  local ignore=(
-    "*.lock"
-    "*.log"
-    "*.tmp"
-    "*_history"
-    "*~"
-    ".*.log"
-    ".\#*"
-    "\#*"
-    "__*"
-    ".tmp.drivedownload"
-    ".DS_Store"
-    ".rpt2_cache"
-    "tmp"
-  )
-
-  # if in home directory
-  if [[ $cwd == $HOME ]]; then
-    ignore+=(
-      ".Trash"
-      ".CFUserTextEncoding"
-      ".iterm2_shell_integration*"
-      ".zcompdump*"
-    )
-  fi
-
-  # if in node project
-  if [ -e $cwd/package.json ] || [ -e $cwd/mix.exs ]; then
-    ignore+=(
-      "node_modules"
-      "package-lock.json"
-      "yarn-lock.json"
-      ".tern-port"
-    )
-  fi
-
-  # if in git project
-  if [ -e $cwd/.git ]; then
-    ignore+=(
-      ".git"
-    )
-  fi
-
-  if [[ -e $cwd/mix.exs ]]; then
-    ignore+=(
-      "_build"
-      "deps"
-    )
-  fi
-
-  test -e $HOME/.gitignore && ignore+=($(cat $HOME/.gitignore | grep -vE '(\#|^$)' | xargs echo))
-  test -e $cwd/.gitignore && ignore+=($(cat $cwd/.gitignore | grep -vE '(\#|^$)' | xargs echo))
-
-  # sort globs
-  ignore=($(echo ${ignore} | tr ' ' '\n' | sort | uniq | tr '\n' ' '))
-
-  echo "${(j:|:)ignore}"
-}
+IGNORE_GLOB=$(
+  grep -vE '(^\s*?\#|^\#|^$)' $HOME/.gitignore \
+    | sort \
+    | uniq \
+    | tr '\n' '|' \
+    | head --bytes -1
+)
 
 function relpath() {
   [[ $# -ge 1 ]] && [[ $# -le 2 ]] || return 1
@@ -91,7 +38,7 @@ function lsr() {
     --modified \
     --sort Name \
     --time-style long-iso \
-    --ignore-glob "$(get_ignore_glob)" \
+    --ignore-glob "$IGNORE_GLOB" \
     --git-ignore \
     $@
 }
@@ -120,7 +67,7 @@ function k() {
 
 function tree() {
   /usr/local/bin/tree \
-    -I "$(get_ignore_glob)" \
+    -I "$IGNORE_GLOB" \
     -C \
     -a \
     --dirsfirst \
