@@ -125,7 +125,7 @@ values."
     ;; packages then consider to create a layer, you can also put the
     ;; configuration in `dotspacemacs/config'.
     dotspacemacs-additional-packages '(
-				        cask
+                                        cask
                                         commander
                                         (dhall-mode
                                           :location (recipe
@@ -141,6 +141,8 @@ values."
                                         pug-mode
                                         prettier-js
                                         protobuf-mode
+                                        shen-elisp
+                                        shen-mode
                                         tuareg
                                         writegood-mode
                                         unicode-input
@@ -467,7 +469,7 @@ It should only modify the values of Spacemacs settings."
 
     ;; If non-nil, advise quit functions to keep server open when quitting.
     ;; (default nil)
-    dotspacemacs-persistent-server nil
+    dotspacemacs-persistent-server t
 
     ;; List of search tool executable names. Spacemacs uses the first installed
     ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
@@ -535,9 +537,13 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
+  (server-start)
 
   (setq global-linum-mode nil)
   (setq global-vi-tilde-fringe-mode nil)
+
+  (setq flycheck-pos-tip-timeout 5)
+  ;; (setq flycheck--idle-trigger-timer .1)
 
   (setq-default evil-shift-width 2)
   (setq-default css-indent-offset 2)

@@ -38,6 +38,9 @@ brew install bash
 brew install bash-completion2
 brew install zsh
 brew install zsh-completions
+brew install zsh-autosuggestions
+brew install zsh-syntax-highlighting
+brew install shellcheck
 # Switch to using brew-installed zsh and bash
 if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then echo '/usr/local/bin/bash' | sudo tee -a /etc/shells; fi
 if ! fgrep -q '/usr/local/bin/zsh' /etc/shells; then echo '/usr/local/bin/zsh' | sudo tee -a /etc/shells; fi
@@ -77,6 +80,7 @@ brew install tree
 # misc
 brew install asdf
 brew install heroku-toolbelt
+brew install thefuck
 
 # Install macOS apps
 brew tap caskroom/cask
