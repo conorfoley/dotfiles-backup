@@ -73,8 +73,7 @@ function tmux_start_session() {
       local answer=
       vared -ep "%F{black}make directory%f %B%F{blue}$dir%b%F{black}? [%f%F{white}Y%f%F{gray}n%f%F{black}]%f " answer
       if [[ ! -z $answer && ($answer = n || $answer = N) ]]; then
-        >&2 tmux_color black "aborted."
-        return 1
+        >&2 tmux_color black "aborted" && return 1
       fi
     fi
     tmux_color black "creating $dir..."
@@ -85,8 +84,7 @@ function tmux_start_session() {
     local answer=
     vared -ep "%F{black}session%f %B%F{blue}$safename%b%F{black} already exists. attach? [%f%F{white}Y%f%F{gray}n%f%F{black}]%f " answer
     if [[ ! -z $answer && ($answer = n || $answer = N) ]]; then
-      >&2 tmux_color black "aborted."
-      return 1
+      >&2 tmux_color black "aborted" && return 1
     else
       tmux_set_tab_title $safename
       tmux attach-session -t $safename -c $realdir
@@ -139,8 +137,7 @@ function tmux_set_tab_title() {
 
 function tmux_current_session() {
   if [ -z $TMUX ]; then
-    >&2 tmux_color red "not in tmux session."
-    exit 1
+    >&2 tmux_color red "not in tmux session." && exit 1
   fi
   cut -d ',' -f1 <<< $TMUX
 }

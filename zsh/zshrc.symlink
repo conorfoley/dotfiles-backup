@@ -1,7 +1,7 @@
 # -*- mode: shell-script -*-
 
 # shortcut to this dotfiles path is $ZSH
-export ZSH=$HOME/.dotfiles
+export ZSH="$HOME/.dotfiles"
 export DOTFILES=$ZSH
 export PROJECTS=$HOME/Projects
 export EDITOR=emacs
@@ -29,6 +29,8 @@ fi
 typeset -U config_files
 config_files=($ZSH/*/*.zsh)
 
+source $ZSH/zsh/zshenv.symlink
+
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do
   source $file
@@ -52,6 +54,8 @@ done
 
 unset config_files
 
+BREW="$(brew --prefix)"
+
 # source optional profiles
 typeset -U files
 files=(
@@ -67,6 +71,9 @@ files=(
   # profile
   $HOME/.profile
   $HOME/.zshprofile
+  # zsh
+  $BREW/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  $BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 )
 for file in $files; do
   if [[ -e $file ]]; then
@@ -77,13 +84,9 @@ done
 unset file
 unset files
 
-# configure history with 'hstr'
-# https://github.com/dvorka/hstr
-export HISTFILE=$HOME/.zsh_history  # ensure history file visibility
-export HH_CONFIG=hicolor            # get more colors
-bindkey -s "\C-r" "\eqhh\n"         # bind hh to Ctrl-r (for Vi mode check doc)
+eval $(thefuck --alias)
 
-if [ -f ~/.fzf.zsh ]; then
-  source ~/.fzf.zsh
-  export FZF_DEFAULT_OPTS='--layout=reverse'
-fi
+# bindkey -s '^H' 'cd .. \r'
+# bindkey -s '^J' 'cd .. \r'
+# bindkey -s '^K' 'cd - \r'
+# bindkey -s '^L' 'cd - \r'

@@ -2,11 +2,11 @@
 
 if [[ -z $IGNORE_GLOB ]]; then
   IGNORE_GLOB=$(
-    grep -vE '(^\s*?\#|^\#|^$)' "$HOME/.gitignore" \
-      | sort \
-      | uniq \
-      | tr '\n' '|' \
-      | head --bytes -1
+    rg -v '(^\s*?\#|^\#|^$)' "$HOME/.gitignore" | \
+      sort | \
+      uniq | \
+      tr '\n' '|' | \
+      head --bytes -1
   )
   export IGNORE_GLOB;
 fi
@@ -49,43 +49,38 @@ function lsr() {
 # navigation
 
 function cd() {
-  local pwd=$PWD
   local arg="$@"
   local dir="$arg"
+  local list=($(builtin dirs -p -l))
 
   if [[ -z $dir ]]; then
-    return 0;
-  fi
-
-  local list=($(builtin dirs -p -l))
-  local first=${list[1]}
-  local last=${list[-2]}
-
-  if [[ $dir == '-' ]]; then
-    dir=$last
+    return 1
+  elif [[ $dir == '-' ]]; then
+    dir=${list[-2]}
     for stored in $list; do
-      if [[ $stored != $pwd ]] && [[ $stored =~ ^$pwd ]]; then
+      if [[ $stored != $PWD ]] && [[ $stored =~ ^$PWD ]]; then
         dir=$stored
         break
       fi
     done
+  elif [[ ! -d $dir ]]; then
+    >&2 echo "no such file or directory: $dir" && return 1
   elif [[ $dir =~ '^\.' ]]; then
-    dir=$(realpath $pwd/$dir)
+    dir=$(realpath $PWD/$dir)
   elif [[ ! $dir =~ '^/' ]]; then
     dir=$(realpath $dir)
   fi
 
-  if [[ $dir == $pwd ]]; then
-    return 0;
-  fi
+  test $dir == $PWD && return 0
 
   tmux_initialize_session_cwd
 
+  local pwd=$PWD
   if [[ ${list[(ie)$dir]} -gt ${#list} ]] && [[ $pwd =~ ^$dir ]]; then
     local dir_index=${list[(ie)$dir]}
     eval "popd -q -$dir_index" 2>/dev/null
   elif [[ $arg == '-' ]] && [[ ! $dir =~ ^$pwd ]]; then
-    return 0;
+    return 0
   else
     pushd -q $dir
   fi
@@ -118,11 +113,11 @@ function tree() {
     -a \
     --dirsfirst \
     --noreport \
-    "$@" \
-    | more \
-        --raw-control-chars \
-        --quiet \
-        --force
+    "$@" | \
+    more \
+      --raw-control-chars \
+      --quiet \
+      --force
 }
 
 function ff() {
@@ -140,4 +135,20 @@ function ff() {
       fi
     fi
   fi
+}
+
+# processes
+
+function killgrep() {
+  ps aux | \
+    rg "$@" | \
+    rg -v " 0:00\.0\d rg $@"
+}
+
+function killport() {
+  lsof -i :"$@" | \
+    tr -s ' ' | \
+    cut -d' ' -f2 | \
+    tail --lines -1 | \
+    xargs kill -9
 }

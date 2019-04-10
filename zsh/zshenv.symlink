@@ -1,6 +1,6 @@
 # -*- mode: shell-script -*-
 
-function contains {
+function contains() {
   local string="$1"
   local substring="$2"
   if test "${string#*$substring}" != "$string"; then
@@ -10,8 +10,8 @@ function contains {
   fi
 }
 
-function add_path {
-  if [[ $PATH != ^$1:* ]] && [[ $PATH != *:$1 ]] && ! contains $PATH :$1:; then
+function add_path() {
+  if [[ $PATH != ^$1:* ]] && [[ $PATH != *:$1 ]] && ! contains "$PATH" ":$1:"; then
     PATH="$PATH:$1"
   fi
 }
@@ -37,8 +37,3 @@ add_path ~/bin
 
 unset -f contains
 unset -f add_path
-
-autoload -Uz compinit
-compinit
-. /usr/local/Cellar/asdf/0.6.3/asdf.sh
-. /usr/local/Cellar/asdf/0.6.3/etc/bash_completion.d/asdf.bash
