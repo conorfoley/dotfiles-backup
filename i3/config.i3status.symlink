@@ -1,0 +1,58 @@
+# i3status config file (v2)
+# See `man i3status`
+
+general {
+  colors = true
+  interval = 2
+  color_good = "#268bd2"
+  color_degraded = "#b58900"
+  color_bad = "#bf616a"
+  output_format = "i3bar"
+}
+
+order += "tztime local"
+order += "cpu_usage"
+order += "disk /"
+order += "battery 0"
+order += "volume master"
+order += "wireless wlp59s0"
+
+wireless wlp59s0 {
+  align = right
+  format_up = "  %essid %quality  "
+  format_down = "  down  "
+}
+
+battery 0 {
+  integer_battery_capacity = true
+  hide_seconds = true
+  format = "%status %percentage %remaining"
+  threshold_type = "percentage"
+  low_threshold = 15
+  status_bat = ""
+  status_chr = ""
+  status_full = ""
+}
+
+tztime local {
+  align = center
+  format = " %_m/%d %l:%M%p"
+}
+
+cpu_usage {
+  max_threshold = 95
+  degraded_threshold = 80
+  format = " %usage"
+}
+
+volume master {
+  format = " %volume"
+  format_muted = "✘ %volume"
+  device = "default"
+  mixer = "Master"
+  mixer_idx = 0
+}
+
+disk "/" {
+  format = " %avail"
+}
