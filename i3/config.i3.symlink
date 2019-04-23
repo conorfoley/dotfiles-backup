@@ -1,17 +1,20 @@
 # i3 config file (v4)
 # See https://i3wm.org/docs/userguide.html
 
+exec --no-startup-id compton -b ---config ~/.config/compton/compton.conf
+
 #
 # Settings
 #
 
 # modifier keys
+set $Super Mod4
 set $Hyper Mod3
 set $Alt   Mod1
 
 # mouse
 focus_follows_mouse yes
-floating_modifier $Hyper
+floating_modifier $Super
 
 # windows
 floating_maximum_size 1000x1000
@@ -25,11 +28,11 @@ hide_edge_borders smart
 smart_borders on
 
 # gaps
-gaps bottom 18
+gaps top    13
 gaps inner  12
 gaps left   -12
 gaps right  -12
-gaps top    -12
+gaps bottom 12
 
 # colors
 set $base04  #002129
@@ -49,6 +52,7 @@ set $violet  #6c71c4
 set $blue    #268bd2
 set $cyan    #2aa198
 set $green   #859900
+set $white   #ffffff
 
 #
 # Bindings
@@ -69,51 +73,39 @@ bindsym $Hyper+Shift+r restart
 bindsym $Hyper+Shift+Escape exec ~/bin/i3_exit.sh
 
 # apps
-bindsym $Hyper+Return exec alacritty
-bindsym $Hyper+Shift+Return exec dmenu_run
+bindsym $Hyper+Return exec gnome-terminal
+bindsym $Hyper+Shift+Return exec --no-startup-id "dmenu_run -b -nf '#eee8d5' -nb '#002129' -sb '#268bd2' -sf '#fdf6e3' -fn 'SourceCodePro-11' -p '>'"
 bindsym $Hyper+Shift+q kill
 
-# layout
-bindsym $Hyper+$Alt+s layout stacking
-bindsym $Hyper+$Alt+w layout tabbed
-bindsym $Hyper+$Alt+e layout toggle split
-
-bindsym $Hyper+$Alt+f fullscreen toggle
-
-bindsym $Hyper+space focus mode_toggle
-bindsym $Hyper+Shift+space floating toggle
-
-# window orientation
-bindsym $Hyper+Alt+h split horizontal
-bindsym $Hyper+Alt+v split vertical
-
 # window focus
-bindsym $Hyper+< focus parent
-bindsym $Hyper+> focus child
+bindsym $Super+Shift+comma  focus parent
+bindsym $Super+Shift+period focus child
 
-bindsym $Hyper+h focus left
-bindsym $Hyper+j focus down
-bindsym $Hyper+k focus up
-bindsym $Hyper+l focus right
+bindsym $Super+Shift+h focus left
+bindsym $Super+Shift+j focus down
+bindsym $Super+Shift+k focus up
+bindsym $Super+Shift+l focus right
 
 # window movement
-bindsym $Hyper+Shift+h move left
-bindsym $Hyper+Shift+j move down
-bindsym $Hyper+Shift+k move up
-bindsym $Hyper+Shift+l move right
+bindsym $Super+Shift+Ctrl+h move left
+bindsym $Super+Shift+Ctrl+j move down
+bindsym $Super+Shift+Ctrl+k move up
+bindsym $Super+Shift+Ctrl+l move right
 
 # window size
-bindsym $Hyper+Shift+Ctrl+h resize shrink width  6 px or 6 ppt
-bindsym $Hyper+Shift+Ctrl+j resize grow   height 6 px or 6 ppt
-bindsym $Hyper+Shift+Ctrl+k resize shrink height 6 px or 6 ppt
-bindsym $Hyper+Shift+Ctrl+l resize grow   width  6 px or 6 ppt
+bindsym $Super+Shift+$Alt+h resize shrink width  6 px or 6 ppt
+bindsym $Super+Shift+$Alt+j resize grow   height 6 px or 6 ppt
+bindsym $Super+Shift+$Alt+k resize shrink height 6 px or 6 ppt
+bindsym $Super+Shift+$Alt+l resize grow   width  6 px or 6 ppt
 
 #
 # Workspaces
 #
 
+workspace_layout tabbed
+
 set $wsshell  "0:Shell"
-set $wseditor "1:Εditor"
+set $wseditor "1:Editor"
 set $wsweb    "2:Web"
 set $wsmail   "3:Mail"
 set $ws1 "11:1"
@@ -131,40 +123,376 @@ assign [class="(?i)^alacritty$"] $wsshell
 assign [class="(?i)^gnome-terminal$"] $wsshell
 assign [class="(?i)^emacs$"] $wseditor
 assign [class="(?i)^nightly$"] $wsweb
+assign [class="(?i)^firefox"] $wsweb
 assign [class="(?i)^slack$"] $wsmail
 
 # switch
-bindsym $Hyper+s workspace $wsshell
-bindsym $Hyper+e workspace $wseditor
-bindsym $Hyper+w workspace $wsweb
-bindsym $Hyper+m workspace $wsmail
-bindsym $Hyper+1 workspace $ws1
-bindsym $Hyper+2 workspace $ws2
-bindsym $Hyper+3 workspace $ws3
-bindsym $Hyper+4 workspace $ws4
-bindsym $Hyper+5 workspace $ws5
-bindsym $Hyper+6 workspace $ws6
-bindsym $Hyper+7 workspace $ws7
-bindsym $Hyper+8 workspace $ws8
-bindsym $Hyper+9 workspace $ws9
+bindsym $Super+s workspace $wsshell
+bindsym $Super+e workspace $wseditor
+bindsym $Super+w workspace $wsweb
+bindsym $Super+m workspace $wsmail
+bindsym $Super+h workspace prev
+bindsym $Super+l workspace next
+bindsym $Super+1 workspace $ws1
+bindsym $Super+2 workspace $ws2
+bindsym $Super+3 workspace $ws3
+bindsym $Super+4 workspace $ws4
+bindsym $Super+5 workspace $ws5
+bindsym $Super+6 workspace $ws6
+bindsym $Super+7 workspace $ws7
+bindsym $Super+8 workspace $ws8
+bindsym $Super+9 workspace $ws9
 
 # move
-bindsym $Hyper+Shift+s workspace $wsshell
-bindsym $Hyper+Shift+e workspace $wseditor
-bindsym $Hyper+Shift+w workspace $wsweb
-bindsym $Hyper+Shift+m workspace $wsmail
-bindsym $Hyper+Shift+1 move container to workspace $ws1
-bindsym $Hyper+Shift+2 move container to workspace $ws2
-bindsym $Hyper+Shift+3 move container to workspace $ws3
-bindsym $Hyper+Shift+4 move container to workspace $ws4
-bindsym $Hyper+Shift+5 move container to workspace $ws5
-bindsym $Hyper+Shift+6 move container to workspace $ws6
-bindsym $Hyper+Shift+7 move container to workspace $ws7
-bindsym $Hyper+Shift+8 move container to workspace $ws8
-bindsym $Hyper+Shift+9 move container to workspace $ws9
+bindsym $Super+$Alt+s move container to workspace $wsshell, workspace $wsshell
+bindsym $Super+$Alt+e move container to workspace $wseditor, workspace $wseditor
+bindsym $Super+$Alt+w move container to workspace $wsweb, workspace $wsweb
+bindsym $Super+$Alt+m move container to workspace $wsmail, workspace $wsmail
+bindsym $Super+$Alt+h move container to workspace prev, workspace prev
+bindsym $Super+$Alt+l move container to workspace next, workspace next
+bindsym $Super+$Alt+1 move container to workspace $ws1, workspace $ws1
+bindsym $Super+$Alt+2 move container to workspace $ws2, workspace $ws2
+bindsym $Super+$Alt+3 move container to workspace $ws3, workspace $ws3
+bindsym $Super+$Alt+4 move container to workspace $ws4, workspace $ws4
+bindsym $Super+$Alt+5 move container to workspace $ws5, workspace $ws5
+bindsym $Super+$Alt+6 move container to workspace $ws6, workspace $ws6
+bindsym $Super+$Alt+7 move container to workspace $ws7, workspace $ws7
+bindsym $Super+$Alt+8 move container to workspace $ws8, workspace $ws8
+bindsym $Super+$Alt+9 move container to workspace $ws9, workspace $ws9
 
 #
-# statusbar and styles
+# Modes
+#
+
+set $$menu " <u><b>f</b></u>ocus <u><b>m</b></u>ove <u><b>s</b></u>plit l<u><b>a</b></u>yout <u><b>t</b></u>oggle <u><b>S</b></u>ticky <u><b>w</b></u>indow <u><b>W</b></u>orkspace <u><b>i</b></u>3    [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hl</u></b><small>(workspace)</small><b><u>HJKL</u></b><small>(window)</small>   <b>*</b> "
+bindsym Shift+space mode $$menu
+mode --pango_markup $$menu {
+  bindsym Shift+h focus left, mode "default"
+  bindsym Shift+j focus down, mode "default"
+  bindsym Shift+k focus up, mode "default"
+  bindsym Shift+l focus right, mode "default"
+  bindsym Shift+$Alt+h move left, mode "default"
+  bindsym Shift+$Alt+j move down, mode "default"
+  bindsym Shift+$Alt+k move up, mode "default"
+  bindsym Shift+$Alt+l move right, mode "default"
+  bindsym h workspace prev, mode "default"
+  bindsym l workspace next, mode "default"
+  bindsym $Alt+h move to workspace prev, workspace prev, mode "default"
+  bindsym $Alt+l move to workspace next, workspace next, mode "default"
+  bindsym f mode $$focus
+  bindsym m mode $$move
+  bindsym s mode $$split
+  bindsym a mode $$layout
+  bindsym t mode $$toggle
+  bindsym Shift+s mode $$sticky
+  bindsym w mode $$window
+  bindsym Shift+w mode $$workspace
+  bindsym i mode $$i3
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$menu_mini
+  bindsym Shift+space mode $$menu_mini
+}
+
+set $$menu_mini " [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hl</u></b><small>(workspace)</small><b><u>HJKL</u></b><small>(window)</small> "
+mode --pango_markup $$menu_mini {
+  bindsym Shift+h focus left
+  bindsym Shift+j focus down
+  bindsym Shift+k focus up
+  bindsym Shift+l focus right
+  bindsym Shift+$Alt+h move left
+  bindsym Shift+$Alt+j move down
+  bindsym Shift+$Alt+k move up
+  bindsym Shift+$Alt+l move right
+  bindsym h workspace prev
+  bindsym l workspace next
+  bindsym $Alt+h move to workspace prev, workspace prev
+  bindsym $Alt+l move to workspace next, workspace next
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym Return mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$i3 " <u><b>r</b></u>eload <u><b>R</b></u>estart <u><b>e</b></u>xit "
+mode --pango_markup $$i3 {
+  bindsym r reload, mode "default"
+  bindsym Shift+r restart, mode "default"
+  bindsym e exec ~/bin/i3_exit.sh, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$sticky      " <u><b>e</b></u>nable <u><b>d</b></u>isable <u><b>t</b></u>oggle    <b>*</b> "
+set $$sticky_mini " <u><b>e</b></u>nable <u><b>d</b></u>isable <u><b>t</b></u>oggle "
+mode --pango_markup $$sticky {
+  bindsym e sticky enable, mode "default"
+  bindsym d sticky disable, mode "default"
+  bindsym t sticky toggle, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+mode --pango_markup $$sticky_mini {
+  bindsym e sticky enable
+  bindsym d sticky disable
+  bindsym t sticky toggle
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$workspace      " <u><b>r</b></u>ename    [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hl</u></b><small>(direction)</small><b><u>sewm</u></b><small>(fixed)</small><b><u>1-9</u></b><small>(numbered)</small>    <b>*</b> "
+set $$workspace_mini " <u><b>r</b></u>ename    [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hl</u></b><small>(direction)</small><b><u>sewm</u></b><small>(fixed)</small><b><u>1-9</u></b><small>(numbered)</small> "
+mode --pango_markup $$workspace {
+  bindsym r exec i3-input -F 'rename workspace to "%s"' -P 'New name: ', mode "default"
+  bindsym s workspace $wsshell, mode "default"
+  bindsym e workspace $wseditor, mode "default"
+  bindsym w workspace $wsweb, mode "default"
+  bindsym m workspace $wsmail, mode "default"
+  bindsym h workspace prev, mode "default"
+  bindsym l workspace next, mode "default"
+  bindsym 1 workspace $ws1, mode "default"
+  bindsym 2 workspace $ws2, mode "default"
+  bindsym 3 workspace $ws3, mode "default"
+  bindsym 4 workspace $ws4, mode "default"
+  bindsym 5 workspace $ws5, mode "default"
+  bindsym 6 workspace $ws6, mode "default"
+  bindsym 7 workspace $ws7, mode "default"
+  bindsym 8 workspace $ws8, mode "default"
+  bindsym 9 workspace $ws9, mode "default"
+  bindsym $Alt+s move container to workspace $wsshell, workspace $wsshell, mode "default"
+  bindsym $Alt+e move container to workspace $wseditor, workspace $wseditor, mode "default"
+  bindsym $Alt+w move container to workspace $wsweb, workspace $wsweb, mode "default"
+  bindsym $Alt+m move container to workspace $wsmail, workspace $wsmail, mode "default"
+  bindsym $Alt+h move container to workspace prev, workspace prev, mode "default"
+  bindsym $Alt+l move container to workspace next, workspace next, mode "default"
+  bindsym $Alt+1 move container to workspace $ws1, workspace $ws1, mode "default"
+  bindsym $Alt+2 move container to workspace $ws2, workspace $ws2, mode "default"
+  bindsym $Alt+3 move container to workspace $ws3, workspace $ws3, mode "default"
+  bindsym $Alt+4 move container to workspace $ws4, workspace $ws4, mode "default"
+  bindsym $Alt+5 move container to workspace $ws5, workspace $ws5, mode "default"
+  bindsym $Alt+6 move container to workspace $ws6, workspace $ws6, mode "default"
+  bindsym $Alt+7 move container to workspace $ws7, workspace $ws7, mode "default"
+  bindsym $Alt+8 move container to workspace $ws8, workspace $ws8, mode "default"
+  bindsym $Alt+9 move container to workspace $ws9, workspace $ws9, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$workspace_mini
+  bindsym Shift+space mode $$workspace_mini
+}
+mode --pango_markup $$workspace_mini {
+  bindsym r exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
+  bindsym s workspace $wsshell
+  bindsym e workspace $wseditor
+  bindsym w workspace $wsweb
+  bindsym m workspace $wsmail
+  bindsym h workspace prev
+  bindsym l workspace next
+  bindsym 1 workspace $ws1
+  bindsym 2 workspace $ws2
+  bindsym 3 workspace $ws3
+  bindsym 4 workspace $ws4
+  bindsym 5 workspace $ws5
+  bindsym 6 workspace $ws6
+  bindsym 7 workspace $ws7
+  bindsym 8 workspace $ws8
+  bindsym 9 workspace $ws9
+  bindsym $Alt+s move container to workspace $wsshell, workspace $wsshell
+  bindsym $Alt+e move container to workspace $wseditor, workspace $wseditor
+  bindsym $Alt+w move container to workspace $wsweb, workspace $wsweb
+  bindsym $Alt+m move container to workspace $wsmail, workspace $wsmail
+  bindsym $Alt+h move container to workspace prev, workspace prev
+  bindsym $Alt+l move container to workspace next, workspace next
+  bindsym $Alt+1 move container to workspace $ws1, workspace $ws1
+  bindsym $Alt+2 move container to workspace $ws2, workspace $ws2
+  bindsym $Alt+3 move container to workspace $ws3, workspace $ws3
+  bindsym $Alt+4 move container to workspace $ws4, workspace $ws4
+  bindsym $Alt+5 move container to workspace $ws5, workspace $ws5
+  bindsym $Alt+6 move container to workspace $ws6, workspace $ws6
+  bindsym $Alt+7 move container to workspace $ws7, workspace $ws7
+  bindsym $Alt+8 move container to workspace $ws8, workspace $ws8
+  bindsym $Alt+9 move container to workspace $ws9, workspace $ws9
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$window      " <u><b>f</b></u>ocus <u><b>m</b></u>ove <u><b>t</b></u>oggle   [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hjkl</u></b><small>(direction)</small>    <b>*</b> "
+set $$window_mini " <u><b>f</b></u>ocus <u><b>m</b></u>ove <u><b>t</b></u>oggle   [<b><u>Alt-</u></b>]<small>(move)</small><b><u>hjkl</u></b><small>(direction)</small> "
+mode --pango_markup $$window {
+  bindsym h focus left, mode "default"
+  bindsym j focus down, mode "default"
+  bindsym k focus up, mode "default"
+  bindsym l focus right, mode "default"
+  bindsym $Alt+h move left, mode "default"
+  bindsym $Alt+j move down, mode "default"
+  bindsym $Alt+k move up, mode "default"
+  bindsym $Alt+l move right, mode "default"
+  bindsym f mode $$focus
+  bindsym m mode $$move
+  bindsym t mode $$toggle
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$window_mini
+  bindsym Shift+space mode $$window_mini
+}
+mode --pango_markup $$window_mini {
+  bindsym h focus left
+  bindsym j focus down
+  bindsym k focus up
+  bindsym l focus right
+  bindsym $Alt+h move left
+  bindsym $Alt+j move down
+  bindsym $Alt+k move up
+  bindsym $Alt+l move right
+  bindsym f mode $$focus
+  bindsym m mode $$move
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$focus      " <u><b>p</b></u>arent <u><b>c</b></u>hild <u><b>F</b></u>loating <u><b>t</b></u>iling <u><b>m</b></u>ode_toggle <u><b>h</b></u>← <u><b>j</b></u>↓ <u><b>k</b></u>↑ <u><b>l</b></u>→    <b>*</b> "
+set $$focus_mini " <u><b>p</b></u>arent <u><b>c</b></u>hild <u><b>F</b></u>loating <u><b>t</b></u>iling <u><b>m</b></u>ode_toggle <u><b>h</b></u>← <u><b>j</b></u>↓ <u><b>k</b></u>↑ <u><b>l</b></u>→ "
+mode --pango_markup $$focus {
+  bindsym h focus left, mode "default"
+  bindsym j focus down, mode "default"
+  bindsym k focus up, mode "default"
+  bindsym l focus right, mode "default"
+  bindsym p focus parent, mode "default"
+  bindsym c focus child, mode "default"
+  bindsym F focus floating, mode "default"
+  bindsym t focus tiling, mode "default"
+  bindsym m focus mode_toggle, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$focus_mini
+  bindsym Shift+space mode $$focus_mini
+}
+mode --pango_markup $$focus_mini {
+  bindsym h focus left
+  bindsym j focus down
+  bindsym k focus up
+  bindsym l focus right
+  bindsym p focus parent
+  bindsym c focus child
+  bindsym F focus floating
+  bindsym t focus tiling
+  bindsym m focus mode_toggle,
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode
+  bindsym Shift+space mode "default"
+}
+
+set $$move      " <u><b>h</b></u>← <u><b>j</b></u>↓ <u><b>k</b></u>↑ <u><b>l</b></u>→    <b>*</b> "
+set $$move_mini " <u><b>h</b></u>← <u><b>j</b></u>↓ <u><b>k</b></u>↑ <u><b>l</b></u>→ "
+mode --pango_markup $$move {
+  bindsym h move left, mode "default"
+  bindsym j move down, mode "default"
+  bindsym k move up, mode "default"
+  bindsym l move right, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$move_mini
+  bindsym Shift+space mode $$move_mini
+}
+mode --pango_markup $$move_mini {
+  bindsym h move left
+  bindsym j move down
+  bindsym k move up
+  bindsym l move right
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$layout      " <u><b>d</b></u>efault <u><b>t</b></u>abbed <u><b>s</b></u>tacking split<u><b>v</b></u> split<u><b>h</b></u> <u><b>T</b></u>oggle_split    <b>*</b> "
+set $$layout_mini " <u><b>d</b></u>efault <u><b>t</b></u>abbed <u><b>s</b></u>tacking split<u><b>v</b></u> split<u><b>h</b></u> <u><b>T</b></u>oggle_split "
+mode --pango_markup $$layout {
+  bindsym d layout default, mode "default"
+  bindsym t layout tabbed, mode "default"
+  bindsym s layout stacking, mode "default"
+  bindsym v layout splitv, mode "default"
+  bindsym h layout splith, mode "default"
+  bindsym Shift+T layout toggle split, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$layout_mini
+  bindsym Shift+space mode $$layout_mini
+}
+mode --pango_markup $$layout_mini {
+  bindsym d layout default
+  bindsym t layout tabbed
+  bindsym s layout stacking
+  bindsym v layout splitv
+  bindsym h layout splith
+  bindsym Shift+T layout toggle split
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$toggle      " <u><b>f</b></u>ullscreen <u><b>F</b></u>oating focus_<u><b>m</b></u>ode    <b>*</b> "
+set $$toggle_mini " <u><b>f</b></u>ullscreen <u><b>F</b></u>oating focus_<u><b>m</b></u>ode "
+mode --pango_markup $$toggle {
+  bindsym f fullscreen toggle, mode "default"
+  bindsym Shift+F floating toggle, mode "default"
+  bindsym m focus mode_toggle, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$toggle_mini
+  bindsym Shift+space mode $$toggle_mini
+}
+mode --pango_markup $$toggle_mini {
+  bindsym f fullscreen toggle
+  bindsym Shift+F floating toggle
+  bindsym m focus mode_toggle
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+set $$split      " <u><b>h</b></u>orizontal <u><b>v</b></u>ertical <u><b>t</b></u>oggle    <b>*</b> "
+set $$split_mini " <u><b>h</b></u>orizontal <u><b>v</b></u>ertical <u><b>t</b></u>oggle "
+mode --pango_markup $$split {
+  bindsym h split horizontal, mode "default"
+  bindsym v split vertical, mode "default"
+  bindsym t split toggle, mode "default"
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode $$split_mini
+  bindsym Shift+space mode $$split_mini
+}
+mode --pango_markup $$split_mini {
+  bindsym h split horizontal
+  bindsym v split vertical
+  bindsym t split toggle
+  bindsym Escape mode "default"
+  bindsym Ctrl-g mode "default"
+  bindsym space mode "default"
+  bindsym Shift+space mode "default"
+}
+
+#
+# Statusbar and styles
 #
 
 font pango:Source Code Pro 11
@@ -173,9 +501,11 @@ bar {
   binding_mode_indicator yes
   hidden_state show
   mode hide
-  position bottom
+  position top
   separator_symbol " — "
   status_command i3status
+  font pango:Source Code Pro 11
+
   strip_workspace_numbers yes
   tray_output primary
   workspace_buttons yes
@@ -183,43 +513,39 @@ bar {
   colors {
     separator  $base02
     background $base04
-    statusline $base1
+    statusline $base2
     # class            border   backgr.  text     indicator  child_border
-    focused_workspace  $base04  $base04  $green
+    focused_workspace  $blue    $blue    $base3
     active_workspace   $base04  $base04  $base01
-    inactive_workspace $base04  $base04  $base01
-    urgent_workspace   $base04  $base04  $magenta
-    binding_mode       $blue    $blue    $base3
+    inactive_workspace $base04  $base04  $base1
+    urgent_workspace   $base04  $magenta $base3
+    binding_mode       $violet  $violet  $white
   }
 }
 
 # window                border   backgr.  text     indicator  child_border
-client.focused          $green   $green   $base3   $violet
-client.focused_inactive $base1   $base02  $base2   $violet
-client.unfocused        $base2   $base02  $base1   $base01
+client.focused          $blue    $blue    $base3   $violet
+client.focused_inactive $base1   #005366  $base2   $violet
+client.unfocused        $base01  $base02  $base1   $base01
 client.urgent           $magenta $magenta $base3   $red
 
 #
 # Startup
 #
 
-# configure screen
-exec_always xsetroot -solid "#002129" # background color
-exec xrandr --output eDP-1 --mode 2880x1620 # set resolution
-exec unclutter -idle 2 &
+exec_always --no-startup-id pkill compton; compton --config ~/.config/compton/compton.conf # compositor for window transparency
+exec_always --no-startup-id hsetroot -solid "#002129" # set background color
+exec_always --no-startup-id xrandr --output eDP-1 --mode 2880x1620 # set resolution
+exec_always --no-startup-id unclutter -idle 2 &
 
 # configure touchpad
-# enable tapping
-exec xinput set-prop 14 302 1
-# enable tapping drag
-exec xinput set-prop 14 304 1
-# enable natural scrolling
-exec xinput set-prop 14 310 1
-# highest sensitivity
-exec xinput set-prop 14 322 1
+exec_always --no-startup-id xinput set-prop 14 302 1 # enable tapping
+exec_always --no-startup-id xinput set-prop 14 304 1 # enable tapping drag
+exec_always --no-startup-id xinput set-prop 14 310 1 # enable natural scrolling
+exec_always --no-startup-id xinput set-prop 14 322 1 # highest sensitivity
 
 # open apps on startup
-exec alacritty
+exec gnome-terminal
 exec emacs
 exec slack
-exec firefox-trunk
+exec firefox

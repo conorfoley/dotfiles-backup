@@ -20,7 +20,7 @@ order += "wireless wlp59s0"
 wireless wlp59s0 {
   align = right
   format_up = "  %essid %quality  "
-  format_down = "  down  "
+  format_down = "✘  "
 }
 
 battery 0 {
@@ -35,7 +35,6 @@ battery 0 {
 }
 
 tztime local {
-  align = center
   format = " %_m/%d %l:%M%p"
 }
 
