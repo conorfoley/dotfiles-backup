@@ -34,18 +34,17 @@ git_custom_status() {
 }
 
 # show current rbenv version if different from rbenv global
-rbenv_version_status() {
-  local ver=$(rbenv version-name)
-  [ "$(rbenv global)" != "$ver" ] && echo "[$ver]"
-}
+# rbenv_version_status() {
+#   local ver=$(rbenv version-name)
+#   [ "$(rbenv global)" != "$ver" ] && echo "[$ver]"
+# }
 
 # put fancy stuff on the right
-if which rbenv &> /dev/null; then
-  RPS1='$(git_custom_status)%{$fg[red]%}$(rbenv_version_status)%{$reset_color%} $EPS1'
-else
-  RPS1='$(git_custom_status) $EPS1'
-fi
-
+# if which rbenv &> /dev/null; then
+#   RPS1='$(git_custom_status)%{$fg[red]%}$(rbenv_version_status)%{$reset_color%} $EPS1'
+# else
+RPS1='$(git_custom_status) $EPS1'
+# fi
 # basic prompt on the left
 PROMPT='%{$fg[blue]%}%~% %(?.%{$fg[green]%}.%{$fg[red]%})%B
 %{$fg[white]%}λ%b %{$reset_color%}: '

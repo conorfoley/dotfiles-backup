@@ -1,10 +1,14 @@
 # -*- mode: shell-script -*-
 
 # shortcut to this dotfiles path is $ZSH
+export N_PREFIX=$HOME
 export ZSH="$HOME/.dotfiles"
 export DOTFILES=$ZSH
 export PROJECTS=$HOME/Projects
-export EDITOR=emacs
+export EDITOR=vim
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+# export PATH="/usr/local/Cellar/emacs/26.2/bin/emacs:$PATH"
 
 # use gnu manpages
 export HELPDIR=/usr/local/share/zsh/help
@@ -86,6 +90,7 @@ unset files
 
 eval $(thefuck --alias)
 
+bindkey -e
 # bindkey -s '^H' 'cd .. \r'
 # bindkey -s '^J' 'cd .. \r'
 # bindkey -s '^K' 'cd - \r'

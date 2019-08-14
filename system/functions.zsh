@@ -5,8 +5,8 @@ if [[ -z $IGNORE_GLOB ]]; then
     rg -v '(^\s*?\#|^\#|^$)' "$HOME/.gitignore" | \
       sort | \
       uniq | \
-      tr '\n' '|' | \
-      head --bytes -1
+      tr '\n' '|' #| \
+      # head --bytes -1
   )
   export IGNORE_GLOB;
 fi

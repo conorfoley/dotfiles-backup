@@ -39,7 +39,6 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " Langs
 Plugin 'leafgarland/typescript-vim'
 Plugin 'pangloss/vim-javascript'
-Plugin 'leafgarland/typescript-vim'
 Plugin 'tpope/vim-git'
 Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'

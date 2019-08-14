@@ -89,7 +89,7 @@
 [core]
 
 	# Use custom `.gitignore` and `.gitattributes`
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/folecon/.gitignore
 	attributesfile = ~/.gitattributes
 	editor = vim
 
@@ -195,3 +195,14 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[user]
+	name = Conor Foley
+	email = conor.foley@freightquote.com
+[commit]
+	template = /Users/folecon/.stCommitMsg

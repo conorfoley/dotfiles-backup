@@ -83,32 +83,32 @@ brew install heroku-toolbelt
 brew install thefuck
 
 # Install macOS apps
-brew tap caskroom/cask
-brew cask --appdir="/Applications" install \
-  alfred \
-  one-password \
-  iterm2 \
-  spotify \
-  sublime-text \
-  little-snitch \
-  micro-snitch \
-  istatmenu \
-  timing \
-  bartender \
-  karabiner-elements
+# brew tap caskroom/cask
+# brew cask --appdir="/Applications" install \
+#   alfred \
+#   one-password \
+#   iterm2 \
+#   spotify \
+#   sublime-text \
+#   little-snitch \
+#   micro-snitch \
+#   istatmenu \
+#   timing \
+#   bartender \
+#   karabiner-elements
 
-brew cask --appdir="/Applications" google-drive
-# Link the drive's root directories to home
-if [ -d ~/Drive ]; then
-  for path in ~/Drive/*; do
-    if [ ! -d $path ]; then continue; fi
-    file="${path/$HOME\/Drive\/}"
-    if [[ $file =~ '[0-9A-Z]\.*' ]]; then continue; fi
-    target=~/$file
-    if [ -e $target ]; then continue; fi
-    ln -s $path $target
-  done
-fi
+# brew cask --appdir="/Applications" google-drive
+# # Link the drive's root directories to home
+# if [ -d ~/Drive ]; then
+#   for path in ~/Drive/*; do
+#     if [ ! -d $path ]; then continue; fi
+#     file="${path/$HOME\/Drive\/}"
+#     if [[ $file =~ '[0-9A-Z]\.*' ]]; then continue; fi
+#     target=~/$file
+#     if [ -e $target ]; then continue; fi
+#     ln -s $path $target
+#   done
+# fi
 
 # Remove outdated versions from the cellar
 brew cleanup
